@@ -1,0 +1,1659 @@
+<title>ロジ手帖</title>
+<style>
+  :root {
+    --bg: #EFEDE4;
+    --surface: #FCFBF6;
+    --surface-2: #F5F2EA;
+    --surface-3: #EDE9DC;
+    --border: #DEDACB;
+    --border-strong: #C7C2AC;
+    --ink: #20263A;
+    --ink-soft: #555E76;
+    --muted: #8C8770;
+    --accent: #2C3F66;
+    --accent-strong: #1E2C4B;
+    --accent-tint: rgba(44,63,102,0.09);
+    --stamp: #B8721A;
+    --stamp-tint: rgba(184,114,26,0.14);
+    --hue-navy: #2A78D6;    --hue-navy-tint: rgba(42,120,214,0.11);
+    --hue-teal: #4A3AA7;    --hue-teal-tint: rgba(74,58,167,0.10);
+    --hue-amber: #EB6834;   --hue-amber-tint: rgba(235,104,52,0.12);
+    --hue-sky: #EDA100;     --hue-sky-tint: rgba(237,161,0,0.14);
+    --hue-frost: #1BAF7A;   --hue-frost-tint: rgba(27,175,122,0.12);
+    --hue-rose: #E34948;    --hue-rose-tint: rgba(227,73,72,0.11);
+    --shadow: 0 1px 2px rgba(32,38,58,0.06), 0 6px 20px -8px rgba(32,38,58,0.18);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #14161B;
+      --surface: #1B1E25;
+      --surface-2: #20242C;
+      --surface-3: #262B34;
+      --border: #2E333D;
+      --border-strong: #3A4048;
+      --ink: #E9EAE4;
+      --ink-soft: #ABB1BE;
+      --muted: #80869A;
+      --accent: #9AB1E3;
+      --accent-strong: #C0D0F0;
+      --accent-tint: rgba(154,177,227,0.14);
+      --stamp: #E2A24C;
+      --stamp-tint: rgba(226,162,76,0.16);
+      --hue-navy: #3987E5;    --hue-navy-tint: rgba(57,135,229,0.18);
+      --hue-teal: #9085E9;    --hue-teal-tint: rgba(144,133,233,0.18);
+      --hue-amber: #D95926;   --hue-amber-tint: rgba(217,89,38,0.18);
+      --hue-sky: #C98500;     --hue-sky-tint: rgba(201,133,0,0.20);
+      --hue-frost: #199E70;   --hue-frost-tint: rgba(25,158,112,0.20);
+      --hue-rose: #E66767;    --hue-rose-tint: rgba(230,103,103,0.18);
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 24px -10px rgba(0,0,0,0.55);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #14161B;
+    --surface: #1B1E25;
+    --surface-2: #20242C;
+    --surface-3: #262B34;
+    --border: #2E333D;
+    --border-strong: #3A4048;
+    --ink: #E9EAE4;
+    --ink-soft: #ABB1BE;
+    --muted: #80869A;
+    --accent: #9AB1E3;
+    --accent-strong: #C0D0F0;
+    --accent-tint: rgba(154,177,227,0.14);
+    --stamp: #E2A24C;
+    --stamp-tint: rgba(226,162,76,0.16);
+    --hue-navy: #3987E5;    --hue-navy-tint: rgba(57,135,229,0.18);
+    --hue-teal: #9085E9;    --hue-teal-tint: rgba(144,133,233,0.18);
+    --hue-amber: #D95926;   --hue-amber-tint: rgba(217,89,38,0.18);
+    --hue-sky: #C98500;     --hue-sky-tint: rgba(201,133,0,0.20);
+    --hue-frost: #199E70;   --hue-frost-tint: rgba(25,158,112,0.20);
+    --hue-rose: #E66767;    --hue-rose-tint: rgba(230,103,103,0.18);
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 10px 24px -10px rgba(0,0,0,0.55);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic Medium", "Yu Gothic", "Meiryo", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .font-serif { font-family: "Hiragino Mincho ProN", "YuMincho", "Noto Serif JP", "Times New Roman", serif; }
+  .font-mono { font-family: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Consolas, monospace; }
+
+  a { color: var(--accent); }
+
+  .app {
+    max-width: 560px;
+    margin: 0 auto;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: calc(env(safe-area-inset-top, 0px) + 14px) 20px 12px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .brand-mark {
+    font-family: "Hiragino Mincho ProN", "YuMincho", "Noto Serif JP", serif;
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+  }
+  .brand-sub {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+  .today {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+    white-space: nowrap;
+    padding-top: 3px;
+  }
+
+  /* ---------- Content ---------- */
+  .content {
+    flex: 1;
+    padding: 18px 20px calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+  .panel[hidden] { display: none; }
+
+  .section-lead {
+    margin: 2px 0 18px;
+  }
+  .section-eyebrow {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    color: var(--stamp);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  .section-title {
+    font-family: "Hiragino Mincho ProN", "YuMincho", "Noto Serif JP", serif;
+    font-size: 1.375rem;
+    font-weight: 700;
+    line-height: 1.4;
+    text-wrap: balance;
+    margin: 0 0 6px;
+  }
+  .section-note {
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- News cards ---------- */
+  .news-list { display: flex; flex-direction: column; gap: 12px; }
+  .news-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+  }
+  .news-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    padding: 4px 10px 4px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+    color: var(--ink-soft);
+    background: var(--chip-tint, var(--surface-2));
+  }
+  .chip::before {
+    content: '';
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--chip-dot, var(--muted));
+  }
+  .chip--navy  { --chip-dot: var(--hue-navy);  --chip-tint: var(--hue-navy-tint); }
+  .chip--teal  { --chip-dot: var(--hue-teal);  --chip-tint: var(--hue-teal-tint); }
+  .chip--amber { --chip-dot: var(--hue-amber); --chip-tint: var(--hue-amber-tint); }
+  .chip--sky   { --chip-dot: var(--hue-sky);   --chip-tint: var(--hue-sky-tint); }
+  .chip--frost { --chip-dot: var(--hue-frost); --chip-tint: var(--hue-frost-tint); }
+  .chip--rose  { --chip-dot: var(--hue-rose);  --chip-tint: var(--hue-rose-tint); }
+
+  .news-date {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.6875rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .news-title {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.5;
+    margin: 0 0 8px;
+    text-wrap: balance;
+  }
+  .news-lede {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin: 0 0 10px;
+  }
+  .news-more { margin: 0 0 12px; }
+  .news-more summary {
+    list-style: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .news-more summary::-webkit-details-marker { display: none; }
+  .news-more summary .nm-chevron { transition: transform 0.18s ease; }
+  .news-more[open] summary .nm-chevron { transform: rotate(90deg); }
+  .news-more[open] summary .nm-label-closed { display: none; }
+  .news-more:not([open]) summary .nm-label-open { display: none; }
+  .news-body { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); }
+  .news-body p {
+    font-size: 0.875rem;
+    line-height: 1.8;
+    color: var(--ink-soft);
+    margin: 0 0 11px;
+  }
+  .news-body p:last-child { margin-bottom: 0; }
+  .news-body p b { color: var(--ink); }
+  @media (prefers-reduced-motion: reduce) {
+    .news-more summary .nm-chevron { transition: none; }
+  }
+  .news-meta { display: flex; align-items: center; gap: 9px; }
+  .impact { display: inline-flex; align-items: center; gap: 2px; }
+  .impact-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--border-strong); }
+  .impact-dot.filled { background: var(--stamp); }
+
+  .news-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+  }
+  .news-source {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--accent);
+    text-decoration: none;
+    min-width: 0;
+  }
+  .news-source svg { flex: none; opacity: 0.8; }
+  .news-source:hover { color: var(--accent-strong); }
+
+  .read-toggle {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    background: var(--surface-2);
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    padding: 5px 11px 5px 9px;
+    cursor: pointer;
+  }
+  .read-toggle:hover { background: var(--surface-3); }
+  .read-toggle .rt-on { display: none; }
+  .news-card.is-read { opacity: 0.6; }
+  .news-card.is-read .read-toggle {
+    color: var(--stamp);
+    background: var(--stamp-tint);
+    border-color: transparent;
+  }
+  .news-card.is-read .read-toggle .rt-off { display: none; }
+  .news-card.is-read .read-toggle .rt-on { display: inline; }
+
+  .read-archive {
+    margin-top: 16px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .read-archive[hidden] { display: none; }
+  .read-archive summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 13px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .read-archive summary::-webkit-details-marker { display: none; }
+  .read-archive summary svg.ra-check { flex: none; color: var(--stamp); }
+  .read-archive-label { flex: 1; font-size: 0.8125rem; font-weight: 700; color: var(--ink); }
+  .read-archive summary .ra-chevron { flex: none; color: var(--muted); transition: transform 0.18s ease; }
+  .read-archive[open] summary .ra-chevron { transform: rotate(90deg); }
+  .read-archive-body { padding: 0 12px 12px; display: flex; flex-direction: column; gap: 12px; }
+  .read-archive-body .news-card { box-shadow: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .read-archive summary .ra-chevron { transition: none; }
+  }
+
+  .digest-note {
+    margin-top: 16px;
+    padding: 12px 14px;
+    background: var(--surface-2);
+    border: 1px dashed var(--border-strong);
+    border-radius: 12px;
+    font-size: 0.75rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* ---------- Reference book ---------- */
+  .chapter-list { display: flex; flex-direction: column; gap: 10px; }
+  .chapter {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .chapter summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 15px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .chapter summary::-webkit-details-marker { display: none; }
+  .chapter-num {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    color: var(--stamp);
+    background: var(--stamp-tint);
+    border-radius: 8px;
+    padding: 4px 8px;
+    flex: none;
+  }
+  .chapter-heading {
+    flex: 1;
+    font-family: "Hiragino Mincho ProN", "YuMincho", "Noto Serif JP", serif;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+  .chapter-chevron {
+    flex: none;
+    color: var(--muted);
+    transition: transform 0.18s ease;
+  }
+  .chapter[open] .chapter-chevron { transform: rotate(90deg); }
+  .chapter-body {
+    padding: 0 16px 20px;
+    font-size: 0.875rem;
+    line-height: 1.85;
+    color: var(--ink-soft);
+  }
+  .chapter-body h4 {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 16px 0 6px;
+  }
+  .chapter-body p { margin: 0 0 12px; }
+  .chapter-body ul { margin: 0 0 12px; padding-left: 1.1em; }
+  .chapter-body li { margin-bottom: 8px; }
+  .chapter-body li b, .chapter-body p b { color: var(--ink); }
+  .temp-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 16px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chapter-chevron { transition: none; }
+  }
+
+  /* ---------- Glossary ---------- */
+  .glossary-search {
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .glossary-search input {
+    width: 100%;
+    font: inherit;
+    font-size: 0.9375rem;
+    padding: 12px 14px 12px 40px;
+    border-radius: 12px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface);
+    color: var(--ink);
+  }
+  .glossary-search input:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .glossary-search svg {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+  }
+  .glossary-count {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin: -8px 0 14px;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  .term-list { display: flex; flex-direction: column; gap: 10px; }
+  .term {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 13px 15px;
+  }
+  .term-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .term-name { font-weight: 700; font-size: 0.9375rem; }
+  .term-tag { font-size: 0.6875rem; color: var(--muted); font-family: ui-monospace, monospace; }
+  .term-def { font-size: 0.8125rem; line-height: 1.7; color: var(--ink-soft); margin: 0; }
+  .term-empty {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8125rem;
+    padding: 30px 0;
+  }
+
+  /* ---------- History ---------- */
+  .hist-stats { display: flex; gap: 10px; margin-bottom: 18px; }
+  .hist-stat {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+  }
+  .hist-stat-value {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+  }
+  .hist-stat-label { font-size: 0.6875rem; color: var(--muted); margin-top: 2px; }
+
+  .hist-breakdown {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+    margin-bottom: 18px;
+  }
+  .hist-breakdown h2 { font-size: 0.8125rem; font-weight: 700; margin: 0 0 12px; }
+  .hist-insight {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--stamp-tint);
+    color: var(--stamp);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 9px 12px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+  }
+  .hist-insight svg { flex: none; }
+  .hist-dot { flex: none; width: 9px; height: 9px; border-radius: 50%; }
+
+  /* vertical bar chart */
+  .bar-chart {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+    overflow-x: auto;
+  }
+  .bar-col {
+    flex: 1;
+    min-width: 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .bar-value {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+    white-space: nowrap;
+  }
+  .bar-value .bar-pct { font-weight: 400; color: var(--muted); font-size: 0.625rem; }
+  .bar-value.is-zero { color: var(--muted); font-weight: 400; }
+  .bar-track {
+    position: relative;
+    width: 100%;
+    height: 108px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    background-image: repeating-linear-gradient(
+      to top,
+      var(--border) 0, var(--border) 1px,
+      transparent 1px, transparent 25%
+    );
+    border-bottom: 1px solid var(--border-strong);
+  }
+  .bar-fill {
+    width: 60%;
+    max-width: 30px;
+    min-height: 3px;
+    border-radius: 5px 5px 2px 2px;
+  }
+  .bar-fill.is-zero { background: var(--surface-3) !important; }
+  .bar-label {
+    margin-top: 8px;
+    font-size: 0.625rem;
+    line-height: 1.35;
+    color: var(--ink-soft);
+    text-align: center;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+
+  .hist-list-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .hist-list-title { font-size: 0.8125rem; font-weight: 700; margin: 0; }
+  .hist-toggle-group {
+    display: inline-flex;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 3px;
+    gap: 2px;
+  }
+  .hist-toggle-btn {
+    font: inherit;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    background: none;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .hist-toggle-btn.active { background: var(--surface); color: var(--accent); box-shadow: var(--shadow); }
+
+  .hist-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+  }
+  .hist-item svg { flex: none; color: var(--stamp); margin-top: 2px; }
+  .hist-item-title { font-size: 0.8125rem; font-weight: 600; line-height: 1.5; }
+  .hist-item-meta { font-size: 0.6875rem; color: var(--muted); margin-top: 3px; font-family: ui-monospace, monospace; }
+
+  .hist-group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .hist-group summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hist-group summary::-webkit-details-marker { display: none; }
+  .hist-group-name { flex: 1; font-size: 0.8125rem; font-weight: 700; }
+  .hist-group-count {
+    flex: none;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .hist-group-chevron { flex: none; color: var(--muted); transition: transform 0.18s ease; }
+  .hist-group[open] .hist-group-chevron { transform: rotate(90deg); }
+  .hist-group-body { padding: 0 14px 12px; }
+  .hist-group-body .hist-item:last-child { margin-bottom: 0; }
+
+  .hist-more {
+    background: none;
+    border: none;
+    margin: 0;
+  }
+  .hist-more summary {
+    list-style: none;
+    cursor: pointer;
+    text-align: center;
+    padding: 11px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--accent);
+    background: var(--surface-2);
+    border: 1px dashed var(--border-strong);
+    border-radius: 12px;
+  }
+  .hist-more summary::-webkit-details-marker { display: none; }
+  .hist-more[open] summary { margin-bottom: 8px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hist-group-chevron { transition: none; }
+  }
+
+  .hist-empty {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8125rem;
+    padding: 40px 20px;
+    background: var(--surface);
+    border: 1px dashed var(--border-strong);
+    border-radius: 14px;
+  }
+
+  /* ---------- Tab bar ---------- */
+  .tabbar {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 100%;
+    max-width: 560px;
+    display: flex;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 8px 10px calc(10px + env(safe-area-inset-bottom, 0px));
+    gap: 6px;
+    z-index: 30;
+  }
+  .tab-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    font: inherit;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--muted);
+    padding: 6px 4px 4px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .tab-btn svg { width: 21px; height: 21px; }
+  .tab-btn:hover { background: var(--surface-2); }
+  .tab-btn.active { color: var(--accent); }
+  .tab-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+</style>
+
+<div class="app">
+  <header class="topbar">
+    <div>
+      <span class="brand-mark">ロジ手帖</span>
+      <span class="brand-sub">食品ロジスティクス ノート</span>
+    </div>
+    <div class="today" id="todayLabel"></div>
+  </header>
+
+  <main class="content">
+
+    <!-- ===================== NEWS ===================== -->
+    <section id="panel-news" class="panel" data-panel="news">
+      <div class="section-lead">
+        <span class="section-eyebrow">News Digest</span>
+        <h1 class="section-title">業界ニュース</h1>
+        <p class="section-note">影響度が大きい順に並んでいます。見出しの下の「続きを読む」で本文を展開できます。「読んだ」を押すと履歴タブに記録され、記事は下の「既読のニュース」にまとまります。</p>
+      </div>
+
+      <div class="news-list" id="newsList">
+
+        <article class="news-card" data-id="n1" data-category="コールドチェーン" data-impact="2" data-date="2026-08-14">
+          <div class="news-card-head">
+            <span class="chip chip--frost">コールドチェーン</span>
+            <span class="news-meta">
+              <span class="impact" title="影響度 2/5" aria-label="影響度5段階中2"><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot"></span><span class="impact-dot"></span><span class="impact-dot"></span></span>
+              <span class="news-date">2026.08.14</span>
+            </span>
+          </div>
+          <h3 class="news-title">キユーソー流通システム、インド定温物流会社の株式取得を延期</h3>
+          <p class="news-lede">海外コールドチェーン網の拡大を進めるキユーソーが、インドでの買収スケジュールを1カ月弱後ろ倒しした。</p>
+          <details class="news-more">
+            <summary><span class="nm-label-closed">続きを読む</span><span class="nm-label-open">閉じる</span><svg class="nm-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="news-body">
+              <p>キユーソー流通システムは、インドの低温物流会社「Coldrush Logistics Private Limited」の株式を取得し、グループに迎え入れる計画を進めていた。当初予定していた取得日について、現地当局からの許認可取得に時間を要するとして、9月10日へ延期すると発表した。</p>
+              <p>日本の食品物流事業者にとって、成長著しいインドの低温物流市場は有力な投資先の一つとされる。人口増加と所得水準の向上を背景に冷凍・冷蔵食品の消費が拡大しており、現地の温度管理インフラの整備が追いついていない領域に日系事業者が参入する動きが続いている。</p>
+              <p><b>実務への示唆：</b>M&Aによる海外進出は、許認可対応など現地規制の影響でスケジュールが動くことが珍しくない。自社で海外展開を検討する際も、当局対応のリードタイムを織り込んだ計画づくりが重要になる。</p>
+            </div>
+          </details>
+          <div class="news-foot">
+            <a class="news-source" href="https://www.lnews.jp/2026/08/s0814102.html" target="_blank" rel="noopener noreferrer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+              LNEWS（RSS取得）
+            </a>
+            <button class="read-toggle" type="button" data-read-toggle>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="rt-off">読んだ</span><span class="rt-on">既読</span>
+            </button>
+          </div>
+        </article>
+
+        <article class="news-card" data-id="n2" data-category="コールドチェーン" data-impact="2" data-date="2026-08-10">
+          <div class="news-card-head">
+            <span class="chip chip--frost">コールドチェーン</span>
+            <span class="news-meta">
+              <span class="impact" title="影響度 2/5" aria-label="影響度5段階中2"><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot"></span><span class="impact-dot"></span><span class="impact-dot"></span></span>
+              <span class="news-date">2026.08.10</span>
+            </span>
+          </div>
+          <h3 class="news-title">丸全昭和運輸、茨城県東海村に空調・定温設備の新倉庫が竣工</h3>
+          <p class="news-lede">首都圏近郊で温度帯物流の受け皿を拡張する動きが続いている。</p>
+          <details class="news-more">
+            <summary><span class="nm-label-closed">続きを読む</span><span class="nm-label-open">閉じる</span><svg class="nm-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="news-body">
+              <p>丸全昭和運輸は、茨城県東海村で新たな倉庫を竣工した。延床面積は約4,000㎡で、このうち980.91㎡は空調設備を備えた「空調倉庫」として、定温管理が必要な貨物に対応する。</p>
+              <p>首都圏に食品を安定供給するためには、消費地に近い場所に温度帯対応拠点を持つことが物流品質を左右する。近年は食品EC・即日配送の拡大もあり、都市近郊での定温倉庫の新設・増床が各社で相次いでいる。</p>
+              <p><b>実務への示唆：</b>自社の在庫拠点を検討する際は、「保管効率」だけでなく「温度帯対応の可否」と「消費地への近さ」を同時に評価する視点が欠かせない。第9章「拠点ネットワーク設計」の考え方も参考になる。</p>
+            </div>
+          </details>
+          <div class="news-foot">
+            <a class="news-source" href="https://www.lnews.jp/2026/08/s0810104.html" target="_blank" rel="noopener noreferrer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+              LNEWS（RSS取得）
+            </a>
+            <button class="read-toggle" type="button" data-read-toggle>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="rt-off">読んだ</span><span class="rt-on">既読</span>
+            </button>
+          </div>
+        </article>
+
+        <article class="news-card" data-id="n3" data-category="DX・自動化" data-impact="3" data-date="2026-08-10">
+          <div class="news-card-head">
+            <span class="chip chip--teal">DX・自動化</span>
+            <span class="news-meta">
+              <span class="impact" title="影響度 3/5" aria-label="影響度5段階中3"><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot"></span><span class="impact-dot"></span></span>
+              <span class="news-date">2026.08.10</span>
+            </span>
+          </div>
+          <h3 class="news-title">三井不動産ほか、東京ミッドタウン八重洲でフィジカルAI配送ロボが稼働</h3>
+          <p class="news-lede">現実世界を認識して自律的に判断するロボットが、館内配送の実証フェーズに入った。</p>
+          <details class="news-more">
+            <summary><span class="nm-label-closed">続きを読む</span><span class="nm-label-open">閉じる</span><svg class="nm-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="news-body">
+              <p>三井不動産・NTT東日本・NAVER Cloud Corporationの3社は、東京ミッドタウン八重洲で、周囲の状況を認識し自ら判断して動く「フィジカルAI」を搭載したデリバリーロボットの実証を開始した。</p>
+              <p>従来の搬送ロボットは決められたルートを走行するタイプが主流だったが、フィジカルAIは周囲の人や障害物の状況を都度認識し、自律的に経路を判断できる点が特徴とされる。倉庫内や商業施設内といった、動きの読みにくい環境での活用が期待されている。</p>
+              <p><b>実務への示唆：</b>庫内作業の省人化を検討する際、固定ルート型の自動化とフィジカルAI型の自動化では投資規模も適用範囲も異なる。自社の庫内レイアウトの変動頻度によって、どちらが適するかが変わってくる。</p>
+            </div>
+          </details>
+          <div class="news-foot">
+            <a class="news-source" href="https://weekly-net.co.jp/news/199741/" target="_blank" rel="noopener noreferrer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+              物流ウィークリー（RSS取得）
+            </a>
+            <button class="read-toggle" type="button" data-read-toggle>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="rt-off">読んだ</span><span class="rt-on">既読</span>
+            </button>
+          </div>
+        </article>
+
+        <article class="news-card" data-id="n4" data-category="規制・政策" data-impact="3" data-date="2026-08-14">
+          <div class="news-card-head">
+            <span class="chip chip--navy">規制・政策</span>
+            <span class="news-meta">
+              <span class="impact" title="影響度 3/5" aria-label="影響度5段階中3"><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot"></span><span class="impact-dot"></span></span>
+              <span class="news-date">2026.08.14</span>
+            </span>
+          </div>
+          <h3 class="news-title">熊本地震の被災地支援、トラック事業者に特例措置</h3>
+          <p class="news-lede">災害時の緊急輸送を支えるため、トラック事業者の手続き負担を一時的に軽減する措置が取られた。</p>
+          <details class="news-more">
+            <summary><span class="nm-label-closed">続きを読む</span><span class="nm-label-open">閉じる</span><svg class="nm-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="news-body">
+              <p>国土交通省は、熊本地震の被災地への支援物資輸送にあたり、トラック事業者が営業所間で車両の増減車を行う際に必要な事業計画変更の手続きを不要とするなど、特例措置を実施した。AZ-COM丸和ホールディングスは、指定公共機関としてトラック200台規模の車両確保・配車調整を行い、支援物資輸送に対応した。</p>
+              <p>災害時には、被災地への輸送需要が短期間で急増する一方、通常の許認可手続きでは対応が追いつかないことがある。国は過去の災害対応の経験を踏まえ、緊急時に限定した規制緩和の仕組みを整えてきている。</p>
+              <p><b>実務への示唆：</b>食品は災害時に最優先で求められる物資の一つ。自社のBCP（事業継続計画）でも、緊急時の車両確保・代替輸送ルートをあらかじめ具体化しておくことが、実際の対応スピードを左右する。</p>
+            </div>
+          </details>
+          <div class="news-foot">
+            <a class="news-source" href="https://www.lnews.jp/2026/08/s0814105.html" target="_blank" rel="noopener noreferrer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+              LNEWS（RSS取得）
+            </a>
+            <button class="read-toggle" type="button" data-read-toggle>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="rt-off">読んだ</span><span class="rt-on">既読</span>
+            </button>
+          </div>
+        </article>
+
+        <article class="news-card" data-id="n5" data-category="市場動向" data-impact="2" data-date="2026-08-14">
+          <div class="news-card-head">
+            <span class="chip chip--amber">市場動向</span>
+            <span class="news-meta">
+              <span class="impact" title="影響度 2/5" aria-label="影響度5段階中2"><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot"></span><span class="impact-dot"></span><span class="impact-dot"></span></span>
+              <span class="news-date">2026.08.14</span>
+            </span>
+          </div>
+          <h3 class="news-title">近鉄グループHD、国際物流事業が大幅増収増益</h3>
+          <p class="news-lede">国際物流セグメントの決算が、荷動きの底堅さを裏付けた。</p>
+          <details class="news-more">
+            <summary><span class="nm-label-closed">続きを読む</span><span class="nm-label-open">閉じる</span><svg class="nm-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="news-body">
+              <p>近鉄グループホールディングスが発表した2027年3月期第1四半期決算によると、国際物流セグメントの売上高は前年同期比18.7％増の2,168億8,600万円、営業利益は同585.9％増の44億5,100万円だった。</p>
+              <p>国際物流各社の決算は、荷動きの実態を映す先行指標としても注目される。同社の大幅増益は、フォワーディング事業を中心に荷動きが底堅く推移していることを示唆している。</p>
+              <p><b>実務への示唆：</b>原材料・資材の海外調達を行う企業にとって、大手フォワーダーの業績動向は運賃・スペース確保の逼迫度合いを読むヒントになる。増収増益局面では、運賃交渉力が荷主側から見て弱まりやすい点にも留意したい。</p>
+            </div>
+          </details>
+          <div class="news-foot">
+            <a class="news-source" href="https://www.lnews.jp/2026/08/s0814705.html" target="_blank" rel="noopener noreferrer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+              LNEWS（RSS取得）
+            </a>
+            <button class="read-toggle" type="button" data-read-toggle>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="rt-off">読んだ</span><span class="rt-on">既読</span>
+            </button>
+          </div>
+        </article>
+
+        <article class="news-card" data-id="n6" data-category="規制・政策" data-impact="5" data-date="2026-04-01">
+          <div class="news-card-head">
+            <span class="chip chip--navy">規制・政策</span>
+            <span class="news-meta">
+              <span class="impact" title="影響度 5/5" aria-label="影響度5段階中5"><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot filled"></span></span>
+              <span class="news-date">2026.04〜</span>
+            </span>
+          </div>
+          <h3 class="news-title">「物流2026年問題」施行 ― 特定荷主にCLO選任・計画策定を義務化</h3>
+          <p class="news-lede">荷主にも罰則付きの法的義務が及ぶフェーズに入った。食品メーカーの物流部門にとって最も影響が大きいニュース。</p>
+          <details class="news-more" open>
+            <summary><span class="nm-label-closed">続きを読む</span><span class="nm-label-open">閉じる</span><svg class="nm-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="news-body">
+              <p>改正物流効率化法により、すべての荷主には2025年4月から「積載効率の向上」「荷待ち時間の短縮」「荷役時間の短縮」といった取り組みが努力義務として課されている。これに続き、年間の取扱貨物重量が9万トン以上の「特定荷主」には、2026年4月から中長期計画の策定・物流統括管理者（CLO）の選任・定期報告が義務化された。</p>
+              <p>特定荷主に該当するかどうかは、自社全体の貨物量ではなく、発荷主・着荷主いずれかの立場での貨物重量が基準となる。違反時は勧告・公表を経て命令が下され、正当な理由なく従わなければ100万円以下の罰金の対象になり得る。中長期計画の提出期限は2026年10月末で、以降は5年に1度の見直しが基本となる。</p>
+              <p><b>実務への示唆：</b>戦略企画の立場では、①自社が特定荷主に該当するかの判定、②CLOに求められる権限設計（部門横断の調整権限と経営層への提言権限）、③中長期計画に盛り込む取り組み内容、の3点を早期に整理しておく必要がある。参考書の第8章「意思決定のための経営フレームワーク」も参照してほしい。</p>
+            </div>
+          </details>
+          <div class="news-foot">
+            <a class="news-source" href="https://www1.logistics.or.jp/j-clop/logistics-shipper-obligations/" target="_blank" rel="noopener noreferrer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+              公益社団法人 日本ロジスティクスシステム協会
+            </a>
+            <button class="read-toggle" type="button" data-read-toggle>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="rt-off">読んだ</span><span class="rt-on">既読</span>
+            </button>
+          </div>
+        </article>
+
+        <article class="news-card" data-id="n7" data-category="市場動向" data-impact="4" data-date="2026-02-04">
+          <div class="news-card-head">
+            <span class="chip chip--amber">市場動向</span>
+            <span class="news-meta">
+              <span class="impact" title="影響度 4/5" aria-label="影響度5段階中4"><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot"></span></span>
+              <span class="news-date">2026.02.04</span>
+            </span>
+          </div>
+          <h3 class="news-title">熊本のスーパー「ロッキー」、AI需要予測の実証で年1億円超のコスト削減見込む</h3>
+          <p class="news-lede">AI需要予測とダイナミックプライシングの組み合わせが、精肉部門の食品ロスを大きく減らした。</p>
+          <details class="news-more" open>
+            <summary><span class="nm-label-closed">続きを読む</span><span class="nm-label-open">閉じる</span><svg class="nm-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="news-body">
+              <p>熊本県でスーパーマーケットを展開するロッキーは、シノプスのAI需要予測サービス「sinops-R」を活用し、精肉部門を対象とした食品ロス削減の実証を行った。農林水産省の「食品ロス削減緊急対策モデル事業」の一環として実施された。</p>
+              <p>製造段階（加工工程）で3.0％、店舗では1.56ポイントのロス率低下が確認され、これによる効果額は約4,400万円と見込まれている。加えてダイナミックプライシング（消費期限に応じた自動値引き）を組み合わせることで、さらに約9,900万円相当の効果が期待できるという。</p>
+              <p><b>実務への示唆：</b>AI需要予測は、発注精度の向上だけでなく、価格戦略と組み合わせることで効果が跳ね上がる点が示唆的。自社での投資判断では、需要予測単体でなく「発注の最適化」と「販売側の価格戦略」を一体で設計できるかが、ROIを左右する。</p>
+            </div>
+          </details>
+          <div class="news-foot">
+            <a class="news-source" href="https://www.ryutsuu.biz/it/s020414.html" target="_blank" rel="noopener noreferrer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+              流通ニュース（ryutsuu.biz）
+            </a>
+            <button class="read-toggle" type="button" data-read-toggle>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="rt-off">読んだ</span><span class="rt-on">既読</span>
+            </button>
+          </div>
+        </article>
+
+        <article class="news-card" data-id="n8" data-category="リスク・セキュリティ" data-impact="4" data-date="2026-08-14">
+          <div class="news-card-head">
+            <span class="chip chip--rose">リスク・セキュリティ</span>
+            <span class="news-meta">
+              <span class="impact" title="影響度 4/5" aria-label="影響度5段階中4"><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot"></span></span>
+              <span class="news-date">2026.08.14</span>
+            </span>
+          </div>
+          <h3 class="news-title">ニチレイ、サイバー攻撃を受け従業員情報が外部流出の恐れ</h3>
+          <p class="news-lede">食品業界大手でも他人事ではない、サプライチェーン全体のセキュリティリスク。</p>
+          <details class="news-more" open>
+            <summary><span class="nm-label-closed">続きを読む</span><span class="nm-label-open">閉じる</span><svg class="nm-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="news-body">
+              <p>冷凍食品大手のニチレイは、サイバー攻撃を受け、従業員情報が外部に漏えいした可能性があると発表した。</p>
+              <p>食品メーカーの基幹システムは、生産管理・在庫管理・物流管理と密接に連携していることが多く、サイバー攻撃による被害は情報漏えいだけでなく、受発注や出荷業務の停止といった事業継続上のリスクにも直結しうる。近年は取引先を踏み台にしたサプライチェーン攻撃も増加傾向にあるとされる。</p>
+              <p><b>実務への示唆：</b>自社のWMS・TMSなど物流系システムが、取引先や委託先のシステムとどうつながっているかを棚卸しし、アクセス権限やバックアップ体制を点検しておくことが、平時のうちにできるリスク対応になる。参考書の第10章「サプライチェーンリスクとサステナビリティ」も参照。</p>
+            </div>
+          </details>
+          <div class="news-foot">
+            <a class="news-source" href="https://online.logi-biz.com/148808/" target="_blank" rel="noopener noreferrer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+              LOGI-BIZ online（RSS取得）
+            </a>
+            <button class="read-toggle" type="button" data-read-toggle>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="rt-off">読んだ</span><span class="rt-on">既読</span>
+            </button>
+          </div>
+        </article>
+
+        <article class="news-card" data-id="n9" data-category="DX・自動化" data-impact="4" data-date="2026-08-01">
+          <div class="news-card-head">
+            <span class="chip chip--teal">DX・自動化</span>
+            <span class="news-meta">
+              <span class="impact" title="影響度 4/5" aria-label="影響度5段階中4"><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot"></span></span>
+              <span class="news-date">2026.08</span>
+            </span>
+          </div>
+          <h3 class="news-title">レベル4自動運転トラック、幹線輸送での社会実装が最終局面へ</h3>
+          <p class="news-lede">ドライバー不足という構造課題への、最も長期的なインパクトを持つ打ち手。</p>
+          <details class="news-more" open>
+            <summary><span class="nm-label-closed">続きを読む</span><span class="nm-label-open">閉じる</span><svg class="nm-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="news-body">
+              <p>新東名高速道路（新御殿場IC〜岡崎SA）などを舞台に、レベル4自動運転トラックの実証実験が最終段階に入っている。自動合流・自動車線変更・遠隔での運行監視といった機能の検証が行われており、2026年度以降の社会実装を見据えた取り組みが進む。</p>
+              <p>トラックドライバーの高齢化と人手不足は、2024年問題以降も物流業界の構造課題であり続けている。自動運転技術は、特に長距離幹線輸送における省人化の切り札として期待されており、政府主導の「RoAD to the L4」プロジェクトのもとで複数企業が実証を重ねてきた。</p>
+              <p><b>実務への示唆：</b>社会実装にはまだ時間を要するが、幹線輸送を自動運転車両、拠点周辺のラストマイルを従来の輸送手段が担うといった「機能分担型」のネットワーク設計を、中長期の拠点戦略に織り込んでおく価値がある。</p>
+            </div>
+          </details>
+          <div class="news-foot">
+            <a class="news-source" href="https://www.toyota-tsusho.com/press/detail/251021_006707.html" target="_blank" rel="noopener noreferrer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+              豊田通商 プレスリリース
+            </a>
+            <button class="read-toggle" type="button" data-read-toggle>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="rt-off">読んだ</span><span class="rt-on">既読</span>
+            </button>
+          </div>
+        </article>
+
+        <article class="news-card" data-id="n10" data-category="コールドチェーン" data-impact="3" data-date="2026-01-01">
+          <div class="news-card-head">
+            <span class="chip chip--frost">コールドチェーン</span>
+            <span class="news-meta">
+              <span class="impact" title="影響度 3/5" aria-label="影響度5段階中3"><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot filled"></span><span class="impact-dot"></span><span class="impact-dot"></span></span>
+              <span class="news-date">2026年版</span>
+            </span>
+          </div>
+          <h3 class="news-title">国内コールドチェーン市場、2026年は約189億ドル規模に</h3>
+          <p class="news-lede">市場は拡大が続く一方、担い手のコスト構造は厳しさを増している。</p>
+          <details class="news-more">
+            <summary><span class="nm-label-closed">続きを読む</span><span class="nm-label-open">閉じる</span><svg class="nm-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="news-body">
+              <p>調査会社の推計によると、日本国内のコールドチェーン物流市場規模は2026年に約189億2,000万ドルとなり、2025年の180億7,000万ドルから拡大する見通し。2031年には237億8,000万ドルに達すると予測されており、年平均成長率（CAGR）は4.68％とされる。</p>
+              <p>冷凍食品市場の拡大や、食品EC・即時配送の普及を背景に、消費者の利便性志向・品質志向に対応した低温物流の高度化が進んでいる。一方で、労働力不足の構造化に加え、電力費・燃料費の上昇が、低温物流事業者にとって大きな経営課題になっている。</p>
+              <p><b>実務への示唆：</b>市場拡大は追い風である一方、委託先の低温物流事業者もコスト増に直面している。運賃・保管料の交渉では、相手のコスト構造の変化を踏まえた対話が、長期的なパートナーシップの維持につながる。</p>
+            </div>
+          </details>
+          <div class="news-foot">
+            <a class="news-source" href="https://www.yano.co.jp/market_reports/C67122400" target="_blank" rel="noopener noreferrer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+              矢野経済研究所 市場調査
+            </a>
+            <button class="read-toggle" type="button" data-read-toggle>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="rt-off">読んだ</span><span class="rt-on">既読</span>
+            </button>
+          </div>
+        </article>
+
+        <article class="news-card" data-id="n11" data-category="海運・運賃" data-impact="1" data-date="2026-08-10">
+          <div class="news-card-head">
+            <span class="chip chip--sky">海運・運賃</span>
+            <span class="news-meta">
+              <span class="impact" title="影響度 1/5" aria-label="影響度5段階中1"><span class="impact-dot filled"></span><span class="impact-dot"></span><span class="impact-dot"></span><span class="impact-dot"></span><span class="impact-dot"></span></span>
+              <span class="news-date">2026.08.10</span>
+            </span>
+          </div>
+          <h3 class="news-title">アジア域内コンテナ運賃、7週ぶりに反発</h3>
+          <p class="news-lede">荷動きの底打ち感を示す、小さいながらも意味のある指標の変化。</p>
+          <details class="news-more">
+            <summary><span class="nm-label-closed">続きを読む</span><span class="nm-label-open">閉じる</span><svg class="nm-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="news-body">
+              <p>アジア域内コンテナ運賃指数（IACI）は、40フィートコンテナ当たり970ドルとなり、前週から1％上昇した。7週ぶりの上昇となる。</p>
+              <p>アジア域内の運賃指数は、域内の荷動きの実態を比較的早く反映する指標として業界で注目される。長期的な下落・停滞が続いたあとの小幅な反発は、在庫調整の一巡や荷動きの底打ちを示すシグナルとして解釈されることがある。</p>
+              <p><b>実務への示唆：</b>単発の週次データで一喜一憂する必要はないが、運賃指数の底打ちが確認された場合、その後の需要回復局面でスペース確保が難しくなる前に、輸送契約や調達計画を見直すタイミングを検討する材料になる。</p>
+            </div>
+          </details>
+          <div class="news-foot">
+            <a class="news-source" href="https://www.jmd.co.jp/articleList.php?targetdate=20260810&date=7" target="_blank" rel="noopener noreferrer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
+              日本海事新聞 電子版
+            </a>
+            <button class="read-toggle" type="button" data-read-toggle>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="rt-off">読んだ</span><span class="rt-on">既読</span>
+            </button>
+          </div>
+        </article>
+
+      </div>
+
+      <details class="read-archive" id="readArchive" hidden>
+        <summary>
+          <svg class="ra-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+          <span class="read-archive-label" id="readArchiveLabel">既読のニュース</span>
+          <svg class="ra-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+        </summary>
+        <div class="read-archive-body" id="readArchiveBody"></div>
+      </details>
+
+      <p class="digest-note">情報源は、物流専門紙・団体・一次発表元に絞っています ― LNEWS／物流ウィークリー／LOGI-BIZ online（各RSS）、流通ニュース、日本海事新聞、公益社団法人日本ロジスティクスシステム協会、矢野経済研究所、企業の公式発表。企業コラムなど販促目的のサイトは情報源から除外しました。このアプリ自体が自動でRSSを取得する仕組みではなく、私（Claude）がRSSやWeb検索で調べた内容を都度反映する形になっています。「ニュース更新して」と伝えれば、その時点の情報を再取得して差し替えます。</p>
+    </section>
+
+    <!-- ===================== REFERENCE BOOK ===================== -->
+    <section id="panel-book" class="panel" data-panel="book" hidden>
+      <div class="section-lead">
+        <span class="section-eyebrow">Field Notes</span>
+        <h1 class="section-title font-serif">参考書 ― 物流の基礎知識</h1>
+        <p class="section-note">食品ロジスティクスの現場知識に加え、企画立案で使う経営・コストの視点まで10章にまとめました。見出しをタップすると開閉します。</p>
+      </div>
+
+      <div class="chapter-list">
+
+        <details class="chapter" open>
+          <summary>
+            <span class="chapter-num">01</span>
+            <span class="chapter-heading">物流の基礎</span>
+            <svg class="chapter-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+          </summary>
+          <div class="chapter-body">
+            <p>物流とは、生産された商品を必要な場所へ、必要なときに、必要な量だけ届ける一連の活動を指す。一般に<b>輸送・保管・荷役・包装・流通加工</b>の5機能に、それらをつなぐ<b>情報</b>を加えた6要素で説明される。</p>
+            <ul>
+              <li><b>輸送</b> ― 拠点間の貨物移動。トラック・鉄道・船舶・航空機のモード選択がコストとリードタイムを左右する。</li>
+              <li><b>保管</b> ― 需給のタイミングのズレを吸収する機能。立地・温度帯・回転率設計が在庫コストに直結する。</li>
+              <li><b>荷役</b> ― 積み込み・積み下ろし・仕分けなど。フォークリフトや自動倉庫(AS/RS)の活用で生産性が変わる。</li>
+              <li><b>包装</b> ― 輸送用の工業包装と、販売用の商業包装に分かれる。</li>
+              <li><b>流通加工</b> ― 値付けや小分けなど、流通段階で行う軽加工。</li>
+              <li><b>情報</b> ― 受発注・在庫・配送状況をつなぐ機能。WMSやTMSが中核を担う。</li>
+            </ul>
+            <h4>物流・ロジスティクス・SCMの違い</h4>
+            <p>「物流」が個々の機能の効率化を指すのに対し、「ロジスティクス」は調達から生産・販売までを一体で最適化する経営活動を指す。さらに自社の枠を超え、供給網全体を最適化する考え方が<b>SCM（サプライチェーン・マネジメント）</b>である。</p>
+            <h4>リードタイム</h4>
+            <p>発注から納品までにかかる時間。短縮は顧客満足度を高める一方、輸送・保管コストの増加を招くこともあり、両者のバランス設計が物流企画の基本となる。</p>
+          </div>
+        </details>
+
+        <details class="chapter">
+          <summary>
+            <span class="chapter-num">02</span>
+            <span class="chapter-heading">食品物流の急所 ― 温度帯とコールドチェーン</span>
+            <svg class="chapter-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+          </summary>
+          <div class="chapter-body">
+            <p>食品物流が一般貨物と大きく異なるのは、温度管理と鮮度・期限管理が品質と安全に直結する点にある。</p>
+            <div class="temp-row">
+              <span class="chip chip--amber">常温（ドライ）目安 15〜25℃</span>
+              <span class="chip chip--sky">冷蔵（チルド）目安 0〜10℃</span>
+              <span class="chip chip--frost">冷凍（フローズン）目安 -18℃以下</span>
+            </div>
+            <p>これらの温度帯を積み込みから配送、店舗の陳列まで途切れさせずに保つ考え方が<b>コールドチェーン</b>。荷役や仕分けで常温にさらされる時間（温度逸脱）を最小化することが品質保持のカギとなる。近年はIoT温度センサーによる常時記録が広がり、逸脱の早期検知や品質保証のエビデンスとして活用されている。</p>
+            <h4>先入れ先出し（FIFO）</h4>
+            <p>消費期限・賞味期限が近い商品から出荷する原則。棚入れ位置や出荷指示のロジックに組み込むことが、食品ロス削減に直結する。</p>
+            <h4>3分の1ルール</h4>
+            <p>製造日から賞味期限までの期間を3等分し、最初の3分の1以内に小売への納品を終える商慣行。納品期限を過ぎた在庫は返品・廃棄の対象になりやすく、需要予測の精度が低いほどロスが拡大する。近年は納品期限を緩和する動きも広がっている。</p>
+            <h4>食品衛生・表示との接点</h4>
+            <p>食品表示法に基づくアレルゲン・原産地表示や、HACCPに沿った工程管理は、保管・仕分け・積み合わせといった物流工程でも異物混入や表示ミスを防ぐ体制と密接に関わる。</p>
+          </div>
+        </details>
+
+        <details class="chapter">
+          <summary>
+            <span class="chapter-num">03</span>
+            <span class="chapter-heading">「2024年問題」と「2026年問題」</span>
+            <svg class="chapter-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+          </summary>
+          <div class="chapter-body">
+            <h4>2024年問題</h4>
+            <p>働き方改革関連法により、トラックドライバーの時間外労働の上限が年960時間に規制され、2024年4月から適用された。長時間労働に支えられてきた輸送力が構造的に不足し、荷物が運べなくなる懸念が「物流の2024年問題」と呼ばれた。</p>
+            <h4>2026年問題</h4>
+            <p>2024年に成立した改正物流効率化法により、取扱貨物重量が年9万トン以上の「特定荷主」などへの規制的措置が2026年4月から施行。これまでの努力義務が、中長期計画の策定・定期報告・非効率な商慣行の是正を伴う法的義務へと変わった点が大きな転換となる。荷主企業も物流の当事者として関与を求められる。</p>
+            <h4>現場での対応策</h4>
+            <ul>
+              <li><b>共同配送</b> ― 複数荷主・複数メーカーの荷物をまとめて運び、積載率を高める。</li>
+              <li><b>モーダルシフト</b> ― 幹線輸送の一部をトラックから鉄道・海運へ切り替え、ドライバー負荷とCO2排出を抑える。</li>
+              <li><b>中継輸送</b> ― 長距離輸送を複数ドライバーで分担し、日帰り運行を可能にする。</li>
+              <li><b>バース予約システム</b> ― 荷待ち時間を減らすため、荷降ろしの時間枠を事前予約する仕組み。</li>
+              <li><b>商慣行の見直し</b> ― 多頻度小口配送や短い納品リードタイムの是正、附帯作業の切り分けなど。</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="chapter">
+          <summary>
+            <span class="chapter-num">04</span>
+            <span class="chapter-heading">現場を測るKPI</span>
+            <svg class="chapter-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+          </summary>
+          <div class="chapter-body">
+            <ul>
+              <li><b>積載率</b> ― 車両の最大積載量に対する、実際に積んだ貨物量の割合。共同配送やルート最適化で改善する。</li>
+              <li><b>実車率（実働率）</b> ― 走行距離のうち、貨物を積んで走った距離の割合。空車回送の削減が課題。</li>
+              <li><b>庫内生産性</b> ― 一定時間あたりに処理できるピッキング・検品・仕分けの物量。レイアウトや機器導入で向上する。</li>
+              <li><b>リードタイム</b> ― 発注から納品までの時間。短縮と物流コストはトレードオフになりやすい。</li>
+              <li><b>在庫回転率</b> ― 一定期間の出荷量を平均在庫量で割った指標。高いほど在庫が効率よく回転している。</li>
+              <li><b>欠品率・誤出荷率</b> ― 需要予測や検品体制の精度を映す指標。食品では欠品も廃棄も機会損失・信用低下に直結する。</li>
+              <li><b>車両稼働率</b> ― 保有車両のうち実際に稼働した割合。稼働率と積載率の両輪でコストが決まる。</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="chapter">
+          <summary>
+            <span class="chapter-num">05</span>
+            <span class="chapter-heading">原材料調達と貿易実務の基礎</span>
+            <svg class="chapter-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+          </summary>
+          <div class="chapter-body">
+            <p>食品メーカーでは原材料や資材を海外から調達する場面も多く、貿易実務の基礎知識が物流企画に役立つ。</p>
+            <ul>
+              <li><b>Incoterms（インコタームズ）</b> ― 貿易取引における売主・買主の費用・危険負担の分岐点を定めた国際ルール。FOB（本船甲板渡し）、CIF（運賃保険料込み）、DDP（関税込み持込渡し）など、型ごとに売主の負担範囲が異なる。</li>
+              <li><b>フォワーダー</b> ― 荷主に代わって輸送手段の手配や通関書類の作成を行う仲介事業者。</li>
+              <li><b>通関・検疫</b> ― 食品の輸入では税関手続きに加え、食品衛生法に基づく検疫所への輸入届出・モニタリング検査が必要になる場合がある。</li>
+              <li><b>L/C（信用状）</b> ― 輸入者の取引銀行が支払いを保証する仕組みで、代金回収リスクを下げる貿易決済手段のひとつ。</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="chapter">
+          <summary>
+            <span class="chapter-num">06</span>
+            <span class="chapter-heading">物流DXと自動化の潮流</span>
+            <svg class="chapter-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+          </summary>
+          <div class="chapter-body">
+            <ul>
+              <li><b>WMS／TMS</b> ― 在庫・出荷指示や配車・運行状況を一元管理し、庫内・輸送双方の可視化を担う基盤システム。</li>
+              <li><b>AI需要予測</b> ― 販売実績や天候・曜日特性を学習し発注量を精緻化。発注時間の短縮と廃棄ロス削減の両立事例が広がる。</li>
+              <li><b>レベル4自動運転トラック</b> ― 高速道路上での合流・車線変更・運行監視を含む実証が進み、幹線輸送での社会実装が段階的に検討されている。</li>
+              <li><b>倉庫ロボット・フィジカルAI</b> ― ロボットやセンサーが実空間を認識しながら庫内のピッキングや搬送を担う技術。</li>
+              <li><b>IoT温度センサー</b> ― 車両・倉庫内の温度をリアルタイムに記録し、コールドチェーンの温度逸脱を早期に検知する仕組み。</li>
+            </ul>
+          </div>
+        </details>
+
+        <details class="chapter">
+          <summary>
+            <span class="chapter-num">07</span>
+            <span class="chapter-heading">物流コストの構造とマネジメント</span>
+            <svg class="chapter-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+          </summary>
+          <div class="chapter-body">
+            <h4>物流コスト対売上高比率</h4>
+            <p>物流コストを売上高で割った比率は、物流企画で最も基本となる経営指標。公益社団法人日本ロジスティクスシステム協会（JILS）が毎年公表する「物流コスト調査」の業種別平均値と自社を比べることで、自社の物流コストが高いのか低いのかを客観的に位置づけられる。</p>
+            <h4>機能別コスト内訳</h4>
+            <p>物流コストは<b>輸送費・保管費・荷役費・包装費・物流管理費</b>（人件費・システム費など）に分解して管理するのが基本。どの機能にコストが偏っているかを把握することで、改善に着手すべき優先順位が見えてくる。</p>
+            <h4>物流ABC（活動基準原価計算）</h4>
+            <p>出荷先や商品ごとに「実際にかかっているコスト」を、ピッキング1件・配送1件といった活動単位で配賦する手法。売上に比例させて配分する従来のやり方では見えなかった、「儲かっている取引」と「実は赤字の取引」が可視化される。多頻度小口の取引先ほど、物流ABCで見ると採算が悪化しているケースが多い。</p>
+            <h4>固定費と変動費</h4>
+            <p>車両費や倉庫の賃料は固定費、燃料費や繁忙期の応援人員費は変動費に近い性質を持つ。物量が増減したときにコストがどう動くかを固定費・変動費に分けて考えると、外部委託の是非やピーク対応の投資判断がしやすくなる。</p>
+          </div>
+        </details>
+
+        <details class="chapter">
+          <summary>
+            <span class="chapter-num">08</span>
+            <span class="chapter-heading">意思決定のための経営フレームワーク</span>
+            <svg class="chapter-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+          </summary>
+          <div class="chapter-body">
+            <h4>Make or Buy（自社物流かアウトソーシングか）</h4>
+            <p>自社物流（自家物流）は柔軟性やノウハウ蓄積に強みがある一方、繁閑差の吸収やアセット保有のリスクが課題になる。3PLへのアウトソーシングは固定費の変動費化や専門性の活用がメリットだが、ノウハウの外部依存や価格交渉力の低下がリスクになる。どちらか一方ではなく、コア領域は内製、それ以外は委託という機能単位の判断が現実的なことが多い。</p>
+            <h4>TCO（総所有コスト）で比較する</h4>
+            <p>初期費用（車両・設備・システム導入費）だけでなく、運用費（人件費・燃料費・保守費）や入替・廃棄コストまで含めた「保有し続けるための総コスト」で比較する考え方。初期費用が安い選択肢でも、TCOで見ると割高になるケースは少なくない。</p>
+            <h4>投資回収期間とROI</h4>
+            <p>投資回収期間＝投資額 ÷ 年間の効果額（コスト削減額など）。ROI（投資収益率）＝年間効果額 ÷ 投資額 × 100（%）。どちらも自動化設備や新拠点の投資判断で最初に確認される、シンプルだが説得力のある指標。</p>
+            <h4>NPVとIRRの基礎</h4>
+            <p>複数年にわたる投資では、将来のキャッシュフローを現在価値に割り引いて評価するNPV（正味現在価値）や、その投資の収益率を示すIRR（内部収益率）を使うと、単純な回収期間法より精緻な比較ができる。大型物流施設や基幹システムの投資稟議では、経営層への説明にこれらの指標が求められることが多い。</p>
+            <h4>損益分岐点分析</h4>
+            <p>損益分岐点物量＝固定費 ÷（1 − 変動費率）。新しい物流拠点や自動化設備が「どのくらいの物量からペイするか」を試算する際の基本ツールで、稟議書の説得力を左右する。</p>
+          </div>
+        </details>
+
+        <details class="chapter">
+          <summary>
+            <span class="chapter-num">09</span>
+            <span class="chapter-heading">拠点ネットワーク設計</span>
+            <svg class="chapter-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+          </summary>
+          <div class="chapter-body">
+            <h4>DCとTCの違い</h4>
+            <p><b>DC（ディストリビューションセンター）</b>は在庫を保有し出荷する「在庫型拠点」、<b>TC（トランスファーセンター）</b>は在庫を持たず仕分け・積み替えのみを行う「通過型拠点」。食品では鮮度重視の商品ほど、TC型で庫内の滞留時間を短くする設計が好まれる。</p>
+            <h4>拠点の集約と分散のトレードオフ</h4>
+            <p>拠点を集約すると保管効率や在庫の一元管理はしやすくなるが、配送距離が伸びリードタイムが長くなる。分散させるとその逆になる。両者のバランスを取ることが拠点戦略の核心であり、唯一の正解はなく、商品特性（鮮度・重量・単価）によって最適解が変わる。</p>
+            <h4>安全在庫と拠点数の関係（√n則）</h4>
+            <p>拠点を分散すると拠点ごとに個別の安全在庫を持つ必要があり、理論上は総安全在庫量が拠点数の平方根に比例して増える傾向がある（√n則）。逆に言えば、拠点を統合すると在庫を大きく圧縮できる可能性がある。拠点再編の効果試算でよく使われる考え方。</p>
+            <h4>重心法による立地検討</h4>
+            <p>各出荷先の所在地と物量を加重平均し、輸送コストが最小になる理論上の立地点を求める手法。実際の用地選定では道路網・労働力確保・地価も加味するが、初期の候補地選定における目安として使える。</p>
+          </div>
+        </details>
+
+        <details class="chapter">
+          <summary>
+            <span class="chapter-num">10</span>
+            <span class="chapter-heading">サプライチェーンリスクとサステナビリティ</span>
+            <svg class="chapter-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
+          </summary>
+          <div class="chapter-body">
+            <h4>BCP（事業継続計画）</h4>
+            <p>地震・水害・感染症などで物流が寸断された際にも、重要な機能を維持・早期復旧するための計画。食品は代替の利かない生活必需品であるため、拠点の複線化や取引先の分散が特に重視される。</p>
+            <h4>サプライチェーン・マッピング</h4>
+            <p>自社から見えている一次サプライヤーだけでなく、その先の二次・三次サプライヤーまで供給網を可視化する取り組み。原材料の産地や代替調達先を事前に把握しておくことが、リスク対応の前提になる。</p>
+            <h4>CO2排出量の算定（GHGプロトコル）</h4>
+            <p>自社の直接排出をScope1、購入電力等をScope2、輸送委託先や仕入れ物流を含む取引先の排出をScope3として区分して算定するのが国際的な基準。物流は多くの企業でScope3の比重が大きく、モーダルシフトや共同配送は輸送距離あたりのCO2削減策として評価されやすい。</p>
+            <h4>グリーンロジスティクスの潮流</h4>
+            <p>環境負荷の低減と物流効率化は多くの場面で両立する（積載率の向上はコスト削減とCO2削減の両方に効く）。ESG投資家や取引先からの開示要請が強まる中、物流企画にも定量的な環境指標の提示が求められる場面が増えている。</p>
+          </div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- ===================== GLOSSARY ===================== -->
+    <section id="panel-glossary" class="panel" data-panel="glossary" hidden>
+      <div class="section-lead">
+        <span class="section-eyebrow">Glossary</span>
+        <h1 class="section-title">用語集</h1>
+        <p class="section-note">現場の物流・食品物流用語に加え、企画立案で使う経営・コスト用語まで50項目まとめました。検索で絞り込めます。</p>
+      </div>
+
+      <div class="glossary-search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="glossarySearch" type="search" placeholder="用語を検索（例：コールドチェーン）" autocomplete="off" />
+      </div>
+      <p class="glossary-count" id="glossaryCount"></p>
+
+      <div class="term-list" id="termList">
+        <div class="term"><div class="term-head"><span class="term-name">3PL（サードパーティ・ロジスティクス）</span><span class="term-tag">物流</span></div><p class="term-def">荷主に代わって物流業務を包括的に受託する事業者・サービス。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">4PL</span><span class="term-tag">物流</span></div><p class="term-def">3PLに加え、物流戦略の企画や複数事業者の統合管理まで担う形態。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">SCM（サプライチェーン・マネジメント）</span><span class="term-tag">経営</span></div><p class="term-def">調達から販売までの供給網全体を、企業の枠を超えて最適化する考え方。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">WMS（倉庫管理システム）</span><span class="term-tag">DX</span></div><p class="term-def">入出庫・在庫・棚卸などの倉庫内業務を管理するシステム。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">TMS（輸配送管理システム）</span><span class="term-tag">DX</span></div><p class="term-def">配車計画や運行状況、輸送コストを管理するシステム。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">EDI（電子データ交換）</span><span class="term-tag">DX</span></div><p class="term-def">受発注データなどを企業間でやり取りする電子的な仕組み。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">Incoterms（インコタームズ）</span><span class="term-tag">貿易</span></div><p class="term-def">貿易取引の費用・危険負担の分岐点を定めた国際ルール。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">コールドチェーン</span><span class="term-tag">食品</span></div><p class="term-def">生産から消費まで低温を途切れさせずに保つ物流の仕組み。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">常温物流（ドライ）</span><span class="term-tag">食品</span></div><p class="term-def">概ね15〜25℃前後で保管・輸送する物流。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">チルド物流（冷蔵）</span><span class="term-tag">食品</span></div><p class="term-def">概ね0〜10℃前後で保管・輸送する物流。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">フローズン物流（冷凍）</span><span class="term-tag">食品</span></div><p class="term-def">-18℃以下を目安に保管・輸送する物流。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">先入れ先出し（FIFO）</span><span class="term-tag">食品</span></div><p class="term-def">入荷や製造が早い商品から先に出荷する原則。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">後入れ先出し（LIFO）</span><span class="term-tag">在庫</span></div><p class="term-def">直近に入荷した商品から出荷する方式。棚卸資産の評価などで使われる。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">3分の1ルール</span><span class="term-tag">食品</span></div><p class="term-def">製造日から賞味期限までを3等分し、最初の3分の1以内に小売へ納品する商慣行。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">賞味期限／消費期限</span><span class="term-tag">食品</span></div><p class="term-def">賞味期限はおいしく食べられる目安、消費期限は安全に食べられる期限を示す。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">物流の2024年問題</span><span class="term-tag">政策</span></div><p class="term-def">トラックドライバーの時間外労働上限規制により輸送力不足が懸念された問題。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">物流の2026年問題</span><span class="term-tag">政策</span></div><p class="term-def">改正物流効率化法により荷主にも規制的措置が課される問題。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">物流効率化法</span><span class="term-tag">政策</span></div><p class="term-def">荷主・物流事業者に効率化の取り組みを求める法律。2026年問題の根拠法。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">共同配送</span><span class="term-tag">輸送</span></div><p class="term-def">複数の荷主・メーカーの荷物をまとめて配送し積載率を高める手法。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">モーダルシフト</span><span class="term-tag">輸送</span></div><p class="term-def">トラック輸送の一部を鉄道・海運などに切り替える取り組み。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">中継輸送</span><span class="term-tag">輸送</span></div><p class="term-def">長距離輸送を複数ドライバーで分担する輸送方式。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">バース予約システム</span><span class="term-tag">DX</span></div><p class="term-def">荷降ろしの時間枠を事前予約し、荷待ち時間を減らす仕組み。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">積載率</span><span class="term-tag">KPI</span></div><p class="term-def">車両の最大積載量に対する、実際の積載量の割合。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">実車率（実働率）</span><span class="term-tag">KPI</span></div><p class="term-def">走行距離のうち貨物を積んで走った距離の割合。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">リードタイム</span><span class="term-tag">KPI</span></div><p class="term-def">発注から納品までにかかる時間。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">在庫回転率</span><span class="term-tag">KPI</span></div><p class="term-def">出荷量を平均在庫量で割った、在庫効率を示す指標。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">ラストマイル</span><span class="term-tag">輸送</span></div><p class="term-def">配送拠点から消費者の手元に届くまでの最終区間。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">フォワーダー</span><span class="term-tag">貿易</span></div><p class="term-def">荷主に代わり輸送手配や通関書類作成を行う仲介事業者。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">標準パレット（T11型）</span><span class="term-tag">保管</span></div><p class="term-def">日本国内物流で広く使われる1100mm×1100mmの一貫輸送用パレット規格。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">フィジカルAI</span><span class="term-tag">DX</span></div><p class="term-def">ロボットやセンサーが実空間を認識しながら作業を担うAI技術。倉庫の自動化などに活用される。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">TCO（総所有コスト）</span><span class="term-tag">投資</span></div><p class="term-def">初期費用に運用費・保守費・廃棄費までを含めた、保有し続けるための総コスト。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">ROI（投資収益率）</span><span class="term-tag">投資</span></div><p class="term-def">年間効果額を投資額で割った、投資効率を示す指標。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">NPV（正味現在価値）</span><span class="term-tag">投資</span></div><p class="term-def">将来のキャッシュフローを現在価値に割り引いて評価する投資判断指標。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">IRR（内部収益率）</span><span class="term-tag">投資</span></div><p class="term-def">投資案件の収益率を示す指標。NPVがゼロになる割引率にあたる。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">損益分岐点</span><span class="term-tag">経営</span></div><p class="term-def">固定費と変動費から算出する、損益がゼロになる物量・売上の水準。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">物流ABC（活動基準原価計算）</span><span class="term-tag">経営</span></div><p class="term-def">出荷先や商品ごとのコストを、作業単位で配賦して算出する原価計算手法。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">物流コスト対売上高比率</span><span class="term-tag">経営</span></div><p class="term-def">物流コストを売上高で割った、業界比較にも使われる代表的な経営指標。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">Make or Buy</span><span class="term-tag">経営</span></div><p class="term-def">物流機能を自社で持つか、外部委託（アウトソーシング）するかの意思決定。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">DC（ディストリビューションセンター）</span><span class="term-tag">拠点</span></div><p class="term-def">在庫を保有し出荷する「在庫型」の物流拠点。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">TC（トランスファーセンター）</span><span class="term-tag">拠点</span></div><p class="term-def">在庫を持たず、仕分け・積み替えのみを行う「通過型」の物流拠点。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">クロスドッキング</span><span class="term-tag">拠点</span></div><p class="term-def">入荷した貨物を保管せずに仕分けてすぐ出荷する物流手法。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">重心法</span><span class="term-tag">拠点</span></div><p class="term-def">出荷先の所在地と物量を加重平均し、輸送コストが最小となる理論上の立地を求める手法。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">安全在庫</span><span class="term-tag">在庫</span></div><p class="term-def">需要や納期のばらつきに備えて、通常より多く持つ在庫。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">経済的発注量（EOQ）</span><span class="term-tag">在庫</span></div><p class="term-def">発注コストと在庫保管コストの合計が最小になる、1回あたりの最適な発注量。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">√n則</span><span class="term-tag">拠点</span></div><p class="term-def">拠点を分散すると、総安全在庫量が理論上は拠点数の平方根に比例して増える傾向を示す考え方。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">BCP（事業継続計画）</span><span class="term-tag">リスク</span></div><p class="term-def">災害などで物流が寸断された際に、重要機能を維持・復旧するための計画。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">サプライチェーン・マッピング</span><span class="term-tag">リスク</span></div><p class="term-def">一次サプライヤーの先の二次・三次サプライヤーまで供給網を可視化する取り組み。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">GHGプロトコル（Scope1/2/3）</span><span class="term-tag">環境</span></div><p class="term-def">温室効果ガス排出量を自社排出・購入電力・取引先を含む排出に区分して算定する国際基準。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">グリーンロジスティクス</span><span class="term-tag">環境</span></div><p class="term-def">環境負荷の低減と物流効率化を両立させる取り組みの総称。</p></div>
+        <div class="term"><div class="term-head"><span class="term-name">ベンチマーキング</span><span class="term-tag">経営</span></div><p class="term-def">自社のコストやKPIを業界平均・他社と比較し、改善余地を把握する手法。</p></div>
+      </div>
+      <p class="term-empty" id="termEmpty" hidden>一致する用語が見つかりませんでした。</p>
+    </section>
+
+    <!-- ===================== HISTORY ===================== -->
+    <section id="panel-history" class="panel" data-panel="history" hidden>
+      <div class="section-lead">
+        <span class="section-eyebrow">Reading Log</span>
+        <h1 class="section-title">閲覧記録</h1>
+        <p class="section-note">「読んだ」を押したニュースの記録です。分類ごとの内訳も確認できます。</p>
+      </div>
+
+      <div class="hist-stats">
+        <div class="hist-stat">
+          <div class="hist-stat-value" id="histReadCount">0</div>
+          <div class="hist-stat-label">既読件数</div>
+        </div>
+        <div class="hist-stat">
+          <div class="hist-stat-value" id="histTotalCount">0</div>
+          <div class="hist-stat-label">全ニュース件数</div>
+        </div>
+        <div class="hist-stat">
+          <div class="hist-stat-value" id="histRate">0%</div>
+          <div class="hist-stat-label">既読率</div>
+        </div>
+      </div>
+
+      <div class="hist-breakdown">
+        <h2>分類ごとの既読数</h2>
+        <div id="histInsight"></div>
+        <div id="histBreakdown"></div>
+      </div>
+
+      <div class="hist-list-head">
+        <p class="hist-list-title">既読リスト</p>
+        <div class="hist-toggle-group" role="tablist" aria-label="既読リストの並び方">
+          <button class="hist-toggle-btn" type="button" data-mode="recent">新しい順</button>
+          <button class="hist-toggle-btn" type="button" data-mode="category">分類ごと</button>
+        </div>
+      </div>
+      <div id="histList"></div>
+    </section>
+
+  </main>
+
+  <nav class="tabbar" aria-label="メインナビゲーション">
+    <button class="tab-btn active" data-target="news" aria-selected="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h13a2 2 0 0 1 2 2v13a1 1 0 0 0 1 1"/><path d="M4 4v15a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1"/><path d="M8 8h8M8 12h8M8 16h4"/></svg>
+      ニュース
+    </button>
+    <button class="tab-btn" data-target="book" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15.5H6.5A2.5 2.5 0 0 0 4 21V5.5Z"/><path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20"/></svg>
+      参考書
+    </button>
+    <button class="tab-btn" data-target="glossary" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+      用語集
+    </button>
+    <button class="tab-btn" data-target="history" aria-selected="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>
+      履歴
+    </button>
+  </nav>
+</div>
+
+<script>
+  (function () {
+    var todayEl = document.getElementById('todayLabel');
+    var d = new Date();
+    var formatted = new Intl.DateTimeFormat('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' }).format(d);
+    todayEl.textContent = formatted;
+
+    var tabs = document.querySelectorAll('.tab-btn');
+    var panels = document.querySelectorAll('.panel');
+    tabs.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var target = btn.getAttribute('data-target');
+        tabs.forEach(function (b) {
+          var active = b === btn;
+          b.classList.toggle('active', active);
+          b.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+        panels.forEach(function (p) {
+          p.hidden = p.getAttribute('data-panel') !== target;
+        });
+        document.querySelector('.content').scrollTo({ top: 0, behavior: 'auto' });
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      });
+    });
+
+    /* ---- News: fixed sort order by impact (desc), tie-break by date (desc) ---- */
+    var newsList = document.getElementById('newsList');
+    var readArchive = document.getElementById('readArchive');
+    var readArchiveBody = document.getElementById('readArchiveBody');
+    var readArchiveLabel = document.getElementById('readArchiveLabel');
+    var newsCards = Array.prototype.slice.call(newsList.querySelectorAll('.news-card'));
+    newsCards.sort(function (a, b) {
+      var impactDiff = Number(b.dataset.impact) - Number(a.dataset.impact);
+      if (impactDiff !== 0) return impactDiff;
+      return a.dataset.date < b.dataset.date ? 1 : -1;
+    });
+
+    /* ---- Read tracking (localStorage) ---- */
+    var READ_KEY = 'logiTechoReadV1';
+    function loadRead() {
+      try { return JSON.parse(localStorage.getItem(READ_KEY)) || {}; }
+      catch (e) { return {}; }
+    }
+    function saveRead(map) {
+      try { localStorage.setItem(READ_KEY, JSON.stringify(map)); } catch (e) {}
+    }
+    var readMap = loadRead();
+
+    var hueByCategory = {
+      '規制・政策': 'navy',
+      'コールドチェーン': 'frost',
+      'DX・自動化': 'teal',
+      '市場動向': 'amber',
+      '海運・運賃': 'sky',
+      'リスク・セキュリティ': 'rose'
+    };
+    /* fixed column order for the bar chart — validated as a colorblind-safe
+       adjacent sequence; never re-sorted by count so bars don't jump around */
+    var CATEGORY_ORDER = ['規制・政策', '市場動向', 'コールドチェーン', '海運・運賃', 'DX・自動化', 'リスク・セキュリティ'];
+
+    function applyReadState(card) {
+      var id = card.dataset.id;
+      var isRead = !!readMap[id];
+      card.classList.toggle('is-read', isRead);
+      var btn = card.querySelector('[data-read-toggle]');
+      if (btn) btn.setAttribute('aria-pressed', isRead ? 'true' : 'false');
+    }
+    newsCards.forEach(applyReadState);
+
+    /* Rebuild both containers from the fixed-order array every time —
+       read cards move into the collapsed archive, unread stay in the main
+       list, always in the same impact order within each container. */
+    function layoutNews() {
+      newsCards.forEach(function (card) {
+        var target = readMap[card.dataset.id] ? readArchiveBody : newsList;
+        target.appendChild(card);
+      });
+      var readCount = readArchiveBody.children.length;
+      readArchive.hidden = readCount === 0;
+      readArchiveLabel.textContent = '既読のニュース（' + readCount + '件）';
+    }
+    layoutNews();
+
+    var HIST_VIEW_KEY = 'logiTechoHistViewV1';
+    var RECENT_PAGE_SIZE = 6;
+    var histViewMode = localStorage.getItem(HIST_VIEW_KEY) || 'recent';
+
+    function histItemHtml(e) {
+      var readAtLabel = new Intl.DateTimeFormat('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(e.readAt));
+      return '<div class="hist-item">' +
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>' +
+        '<div><div class="hist-item-title">' + e.title + '</div>' +
+        '<div class="hist-item-meta">' + e.category + ' ・ ' + e.newsDate + ' ・ ' + readAtLabel + '既読</div></div>' +
+      '</div>';
+    }
+
+    function renderHistory() {
+      var total = newsCards.length;
+      var readEntries = newsCards
+        .filter(function (c) { return !!readMap[c.dataset.id]; })
+        .map(function (c) {
+          return {
+            id: c.dataset.id,
+            title: c.querySelector('.news-title').textContent,
+            category: c.dataset.category,
+            newsDate: c.querySelector('.news-date').textContent,
+            readAt: readMap[c.dataset.id]
+          };
+        })
+        .sort(function (a, b) { return a.readAt < b.readAt ? 1 : -1; });
+
+      document.getElementById('histReadCount').textContent = readEntries.length;
+      document.getElementById('histTotalCount').textContent = total;
+      document.getElementById('histRate').textContent = total ? Math.round((readEntries.length / total) * 100) + '%' : '0%';
+
+      /* ---- breakdown chart (vertical bars, fixed category order) ---- */
+      var counts = {};
+      readEntries.forEach(function (e) { counts[e.category] = (counts[e.category] || 0) + 1; });
+      var presentCategories = CATEGORY_ORDER.filter(function (cat) {
+        return newsCards.some(function (c) { return c.dataset.category === cat; });
+      });
+      var breakdownEl = document.getElementById('histBreakdown');
+      var insightEl = document.getElementById('histInsight');
+
+      if (readEntries.length === 0) {
+        breakdownEl.innerHTML = '<p class="hist-empty" style="padding:16px 0;border:none;background:none;">まだ既読の記事がありません。</p>';
+        insightEl.innerHTML = '';
+      } else {
+        var maxCount = Math.max.apply(null, presentCategories.map(function (c) { return counts[c] || 0; }));
+        breakdownEl.innerHTML = '<div class="bar-chart">' + presentCategories.map(function (cat) {
+          var hue = hueByCategory[cat] || 'navy';
+          var n = counts[cat] || 0;
+          var heightPct = maxCount > 0 ? Math.round((n / maxCount) * 100) : 0;
+          var share = n > 0 ? Math.round((n / readEntries.length) * 100) : 0;
+          var valueHtml = n > 0
+            ? n + '件<span class="bar-pct"> ' + share + '%</span>'
+            : '0';
+          return '<div class="bar-col">' +
+            '<span class="bar-value' + (n === 0 ? ' is-zero' : '') + '">' + valueHtml + '</span>' +
+            '<span class="bar-track"><span class="bar-fill' + (n === 0 ? ' is-zero' : '') + '" style="height:' + heightPct + '%; background:var(--hue-' + hue + ')"></span></span>' +
+            '<span class="bar-label">' + cat + '</span>' +
+          '</div>';
+        }).join('') + '</div>';
+
+        var topCategory = presentCategories.slice().sort(function (a, b) { return (counts[b] || 0) - (counts[a] || 0); })[0];
+        if (topCategory && counts[topCategory] >= 2) {
+          insightEl.innerHTML = '<div class="hist-insight">' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-4 4"/></svg>' +
+            '最も読んでいる分類は「' + topCategory + '」（' + counts[topCategory] + '件）です' +
+          '</div>';
+        } else {
+          insightEl.innerHTML = '';
+        }
+      }
+
+      /* ---- read list: 'recent' (expandable) or 'category' (accordion) ---- */
+      var listEl = document.getElementById('histList');
+
+      if (readEntries.length === 0) {
+        listEl.innerHTML = '<p class="hist-empty">ニュースタブで記事を読んだら「読んだ」を押してください。ここに記録されていきます。</p>';
+        return;
+      }
+
+      if (histViewMode === 'category') {
+        var readCategories = presentCategories
+          .filter(function (cat) { return (counts[cat] || 0) > 0; })
+          .sort(function (a, b) { return (counts[b] || 0) - (counts[a] || 0); });
+        listEl.innerHTML = readCategories.map(function (cat, idx) {
+          var items = readEntries.filter(function (e) { return e.category === cat; });
+          return '<details class="hist-group"' + (idx === 0 ? ' open' : '') + '>' +
+            '<summary>' +
+              '<span class="hist-dot" style="background:var(--hue-' + (hueByCategory[cat] || 'navy') + ')"></span>' +
+              '<span class="hist-group-name">' + cat + '</span>' +
+              '<span class="hist-group-count">' + items.length + '件</span>' +
+              '<svg class="hist-group-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>' +
+            '</summary>' +
+            '<div class="hist-group-body">' + items.map(histItemHtml).join('') + '</div>' +
+          '</details>';
+        }).join('');
+      } else {
+        var visible = readEntries.slice(0, RECENT_PAGE_SIZE);
+        var rest = readEntries.slice(RECENT_PAGE_SIZE);
+        var html = visible.map(histItemHtml).join('');
+        if (rest.length > 0) {
+          html += '<details class="hist-more"><summary>さらに' + rest.length + '件を表示</summary>' +
+            rest.map(histItemHtml).join('') + '</details>';
+        }
+        listEl.innerHTML = html;
+      }
+    }
+
+    var histToggleBtns = Array.prototype.slice.call(document.querySelectorAll('.hist-toggle-btn'));
+    function applyHistViewMode() {
+      histToggleBtns.forEach(function (b) {
+        b.classList.toggle('active', b.dataset.mode === histViewMode);
+      });
+    }
+    histToggleBtns.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        histViewMode = btn.dataset.mode;
+        try { localStorage.setItem(HIST_VIEW_KEY, histViewMode); } catch (e) {}
+        applyHistViewMode();
+        renderHistory();
+      });
+    });
+    applyHistViewMode();
+
+    newsCards.forEach(function (card) {
+      var btn = card.querySelector('[data-read-toggle]');
+      btn.addEventListener('click', function () {
+        var id = card.dataset.id;
+        if (readMap[id]) {
+          delete readMap[id];
+        } else {
+          readMap[id] = new Date().toISOString();
+        }
+        saveRead(readMap);
+        applyReadState(card);
+        layoutNews();
+        renderHistory();
+      });
+    });
+    renderHistory();
+
+    var search = document.getElementById('glossarySearch');
+    var terms = Array.prototype.slice.call(document.querySelectorAll('#termList .term'));
+    var countEl = document.getElementById('glossaryCount');
+    var emptyEl = document.getElementById('termEmpty');
+
+    function updateCount(shown) {
+      countEl.textContent = shown + ' / ' + terms.length + ' 件';
+    }
+    updateCount(terms.length);
+
+    search.addEventListener('input', function () {
+      var q = search.value.trim().toLowerCase();
+      var shown = 0;
+      terms.forEach(function (t) {
+        var text = t.textContent.toLowerCase();
+        var match = q === '' || text.indexOf(q) !== -1;
+        t.hidden = !match;
+        if (match) shown++;
+      });
+      updateCount(shown);
+      emptyEl.hidden = shown !== 0;
+    });
+  })();
+</script>
