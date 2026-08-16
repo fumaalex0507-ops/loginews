@@ -1,0 +1,28 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" fill="#20263A"/>
+
+  <!-- broadcast / news signal waves, emanating from the cargo box -->
+  <g fill="none" stroke="#E2A24C" stroke-width="16" stroke-linecap="round">
+    <path d="M 300 176 A 92 92 0 0 1 392 268" />
+    <path d="M 300 136 A 132 132 0 0 1 432 268" />
+    <path d="M 300 96  A 172 172 0 0 1 472 268" />
+  </g>
+  <circle cx="300" cy="216" r="14" fill="#E2A24C"/>
+
+  <!-- truck -->
+  <g>
+    <!-- cargo box -->
+    <rect x="86" y="216" width="214" height="128" rx="14" fill="#F4EFE4"/>
+    <!-- cab -->
+    <path d="M300 264 h56 c10 0 18 6 22 15 l20 45 v20 a10 10 0 0 1 -10 10 h-88 z" fill="#F4EFE4"/>
+    <!-- cab window -->
+    <rect x="316" y="280" width="40" height="34" rx="6" fill="#20263A"/>
+    <!-- ground line -->
+    <line x1="60" y1="392" x2="452" y2="392" stroke="#E2A24C" stroke-width="10" stroke-linecap="round"/>
+    <!-- wheels -->
+    <circle cx="168" cy="392" r="38" fill="#20263A" stroke="#F4EFE4" stroke-width="10"/>
+    <circle cx="168" cy="392" r="10" fill="#F4EFE4"/>
+    <circle cx="356" cy="392" r="38" fill="#20263A" stroke="#F4EFE4" stroke-width="10"/>
+    <circle cx="356" cy="392" r="10" fill="#F4EFE4"/>
+  </g>
+</svg>

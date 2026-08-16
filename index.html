@@ -1,4 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>ロジ手帖</title>
+<meta name="description" content="食品ロジスティクス担当者向けに、業界ニュースのダイジェストと物流の基礎知識・用語集をまとめた個人用ノート">
+<meta name="theme-color" content="#20263A">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ロジ手帖">
+<meta name="format-detection" content="telephone=no">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icon-152.png">
+<link rel="apple-touch-icon" sizes="120x120" href="icon-120.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<script>window.APP_VERSION = "2026-08-16T11:05:53Z";</script>
 <style>
   :root {
     --bg: #EFEDE4;
@@ -705,6 +723,8 @@
   .tab-btn.active { color: var(--accent); }
   .tab-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 </style>
+</head>
+<body>
 
 <div class="app">
   <header class="topbar">
@@ -1657,3 +1677,22 @@
     });
   })();
 </script>
+
+<script>
+  /* Home-screen apps can hang onto a stale cached copy. On every launch,
+     fetch a tiny always-fresh version.json (cache: 'no-store'); if it
+     doesn't match the version baked into this HTML, force a real reload
+     so the update actually shows up. */
+  (function () {
+    fetch('version.json?_=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data && data.version && window.APP_VERSION && data.version !== window.APP_VERSION) {
+          window.location.reload();
+        }
+      })
+      .catch(function () { /* offline or blocked — just show what we have */ });
+  })();
+</script>
+</body>
+</html>
