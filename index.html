@@ -16,7 +16,7 @@
 <link rel="apple-touch-icon" sizes="120x120" href="icon-120.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
-<script>window.APP_VERSION = "2026-08-16T11:21:45Z";</script>
+<script>window.APP_VERSION = "2026-08-16T12:00:26Z";</script>
 <style>
   :root {
     --bg: #EFEDE4;
@@ -1367,26 +1367,26 @@
       <div class="section-lead">
         <span class="section-eyebrow">Reading Log</span>
         <h1 class="section-title">閲覧記録</h1>
-        <p class="section-note">「読んだ」を押したニュースの記録です。分類ごとの内訳も確認できます。</p>
+        <p class="section-note">「読んだ」を押したニュースは、元の記事がニュース欄から入れ替わったあとも記録が残ります。</p>
       </div>
 
       <div class="hist-stats">
         <div class="hist-stat">
           <div class="hist-stat-value" id="histReadCount">0</div>
-          <div class="hist-stat-label">既読件数</div>
+          <div class="hist-stat-label">既読件数（累計）</div>
         </div>
         <div class="hist-stat">
           <div class="hist-stat-value" id="histTotalCount">0</div>
-          <div class="hist-stat-label">全ニュース件数</div>
+          <div class="hist-stat-label">本日の記事数</div>
         </div>
         <div class="hist-stat">
           <div class="hist-stat-value" id="histRate">0%</div>
-          <div class="hist-stat-label">既読率</div>
+          <div class="hist-stat-label">本日の既読率</div>
         </div>
       </div>
 
       <div class="hist-breakdown">
-        <h2>分類ごとの既読数</h2>
+        <h2>分類ごとの既読数（累計）</h2>
         <div id="histInsight"></div>
         <div id="histBreakdown"></div>
       </div>
@@ -1520,30 +1520,24 @@
     }
 
     function renderHistory() {
-      var total = newsCards.length;
-      var readEntries = newsCards
-        .filter(function (c) { return !!readMap[c.dataset.id]; })
-        .map(function (c) {
-          return {
-            id: c.dataset.id,
-            title: c.querySelector('.news-title').textContent,
-            category: c.dataset.category,
-            newsDate: c.querySelector('.news-date').textContent,
-            readAt: readMap[c.dataset.id]
-          };
-        })
-        .sort(function (a, b) { return a.readAt < b.readAt ? 1 : -1; });
+      /* All-time log: read straight from the stored snapshots, independent
+         of whether the source article is still in today's news list. */
+      var readEntries = Object.keys(readMap).map(function (id) {
+        var e = readMap[id];
+        return { id: id, title: e.title, category: e.category, newsDate: e.newsDate, readAt: e.readAt };
+      }).sort(function (a, b) { return a.readAt < b.readAt ? 1 : -1; });
+
+      var todayTotal = newsCards.length;
+      var todayReadCount = newsCards.filter(function (c) { return !!readMap[c.dataset.id]; }).length;
 
       document.getElementById('histReadCount').textContent = readEntries.length;
-      document.getElementById('histTotalCount').textContent = total;
-      document.getElementById('histRate').textContent = total ? Math.round((readEntries.length / total) * 100) + '%' : '0%';
+      document.getElementById('histTotalCount').textContent = todayTotal;
+      document.getElementById('histRate').textContent = todayTotal ? Math.round((todayReadCount / todayTotal) * 100) + '%' : '0%';
 
-      /* ---- breakdown chart (vertical bars, fixed category order) ---- */
+      /* ---- breakdown chart (vertical bars, fixed category order, all-time) ---- */
       var counts = {};
       readEntries.forEach(function (e) { counts[e.category] = (counts[e.category] || 0) + 1; });
-      var presentCategories = CATEGORY_ORDER.filter(function (cat) {
-        return newsCards.some(function (c) { return c.dataset.category === cat; });
-      });
+      var presentCategories = CATEGORY_ORDER;
       var breakdownEl = document.getElementById('histBreakdown');
       var insightEl = document.getElementById('histInsight');
 
@@ -1637,7 +1631,14 @@
         if (readMap[id]) {
           delete readMap[id];
         } else {
-          readMap[id] = new Date().toISOString();
+          /* Snapshot the article now, so the history/breakdown survive
+             even after this article rotates out of the news list. */
+          readMap[id] = {
+            readAt: new Date().toISOString(),
+            title: card.querySelector('.news-title').textContent,
+            category: card.dataset.category,
+            newsDate: card.querySelector('.news-date').textContent
+          };
         }
         saveRead(readMap);
         applyReadState(card);
