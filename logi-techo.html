@@ -16,7 +16,7 @@
 <link rel="apple-touch-icon" sizes="120x120" href="icon-120.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
-<script>window.APP_VERSION = "2026-08-16T12:00:26Z";</script>
+<script>window.APP_VERSION = "2026-08-16T12:13:33Z";</script>
 <style>
   :root {
     --bg: #EFEDE4;
@@ -468,7 +468,37 @@
   }
   .term-name { font-weight: 700; font-size: 0.9375rem; }
   .term-tag { font-size: 0.6875rem; color: var(--muted); font-family: ui-monospace, monospace; }
-  .term-def { font-size: 0.8125rem; line-height: 1.7; color: var(--ink-soft); margin: 0; }
+  .term-def { font-size: 0.8125rem; line-height: 1.7; color: var(--ink-soft); margin: 0 0 8px; }
+  .term-more { margin: 0; }
+  .term-more summary {
+    list-style: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .term-more summary::-webkit-details-marker { display: none; }
+  .term-more summary .tm-chevron { transition: transform 0.18s ease; }
+  .term-more[open] summary .tm-chevron { transform: rotate(90deg); }
+  .term-more[open] summary .tm-label-closed { display: none; }
+  .term-more:not([open]) summary .tm-label-open { display: none; }
+  .term-detail {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--border);
+  }
+  .term-detail p {
+    font-size: 0.8125rem;
+    line-height: 1.8;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .term-more summary .tm-chevron { transition: none; }
+  }
   .term-empty {
     text-align: center;
     color: var(--muted);
@@ -604,6 +634,25 @@
     white-space: nowrap;
   }
   .hist-toggle-btn.active { background: var(--surface); color: var(--accent); box-shadow: var(--shadow); }
+
+  .hist-filter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .hist-filter select {
+    flex: 1;
+    font: inherit;
+    font-size: 0.8125rem;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: 10px;
+    padding: 8px 10px;
+  }
+  .hist-filter select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 
   .hist-item {
     display: flex;
@@ -1095,7 +1144,7 @@
 
       <div class="chapter-list">
 
-        <details class="chapter" open>
+        <details class="chapter">
           <summary>
             <span class="chapter-num">01</span>
             <span class="chapter-heading">物流の基礎</span>
@@ -1298,7 +1347,7 @@
       <div class="section-lead">
         <span class="section-eyebrow">Glossary</span>
         <h1 class="section-title">用語集</h1>
-        <p class="section-note">現場の物流・食品物流用語に加え、企画立案で使う経営・コスト用語まで50項目まとめました。検索で絞り込めます。</p>
+        <p class="section-note">現場の物流・食品物流用語から企画立案で使う経営・コスト用語まで68項目。「詳しく見る」で解説を展開できます。検索で絞り込めます。</p>
       </div>
 
       <div class="glossary-search">
@@ -1307,57 +1356,551 @@
       </div>
       <p class="glossary-count" id="glossaryCount"></p>
 
-      <div class="term-list" id="termList">
-        <div class="term"><div class="term-head"><span class="term-name">3PL（サードパーティ・ロジスティクス）</span><span class="term-tag">物流</span></div><p class="term-def">荷主に代わって物流業務を包括的に受託する事業者・サービス。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">4PL</span><span class="term-tag">物流</span></div><p class="term-def">3PLに加え、物流戦略の企画や複数事業者の統合管理まで担う形態。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">SCM（サプライチェーン・マネジメント）</span><span class="term-tag">経営</span></div><p class="term-def">調達から販売までの供給網全体を、企業の枠を超えて最適化する考え方。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">WMS（倉庫管理システム）</span><span class="term-tag">DX</span></div><p class="term-def">入出庫・在庫・棚卸などの倉庫内業務を管理するシステム。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">TMS（輸配送管理システム）</span><span class="term-tag">DX</span></div><p class="term-def">配車計画や運行状況、輸送コストを管理するシステム。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">EDI（電子データ交換）</span><span class="term-tag">DX</span></div><p class="term-def">受発注データなどを企業間でやり取りする電子的な仕組み。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">Incoterms（インコタームズ）</span><span class="term-tag">貿易</span></div><p class="term-def">貿易取引の費用・危険負担の分岐点を定めた国際ルール。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">コールドチェーン</span><span class="term-tag">食品</span></div><p class="term-def">生産から消費まで低温を途切れさせずに保つ物流の仕組み。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">常温物流（ドライ）</span><span class="term-tag">食品</span></div><p class="term-def">概ね15〜25℃前後で保管・輸送する物流。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">チルド物流（冷蔵）</span><span class="term-tag">食品</span></div><p class="term-def">概ね0〜10℃前後で保管・輸送する物流。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">フローズン物流（冷凍）</span><span class="term-tag">食品</span></div><p class="term-def">-18℃以下を目安に保管・輸送する物流。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">先入れ先出し（FIFO）</span><span class="term-tag">食品</span></div><p class="term-def">入荷や製造が早い商品から先に出荷する原則。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">後入れ先出し（LIFO）</span><span class="term-tag">在庫</span></div><p class="term-def">直近に入荷した商品から出荷する方式。棚卸資産の評価などで使われる。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">3分の1ルール</span><span class="term-tag">食品</span></div><p class="term-def">製造日から賞味期限までを3等分し、最初の3分の1以内に小売へ納品する商慣行。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">賞味期限／消費期限</span><span class="term-tag">食品</span></div><p class="term-def">賞味期限はおいしく食べられる目安、消費期限は安全に食べられる期限を示す。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">物流の2024年問題</span><span class="term-tag">政策</span></div><p class="term-def">トラックドライバーの時間外労働上限規制により輸送力不足が懸念された問題。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">物流の2026年問題</span><span class="term-tag">政策</span></div><p class="term-def">改正物流効率化法により荷主にも規制的措置が課される問題。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">物流効率化法</span><span class="term-tag">政策</span></div><p class="term-def">荷主・物流事業者に効率化の取り組みを求める法律。2026年問題の根拠法。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">共同配送</span><span class="term-tag">輸送</span></div><p class="term-def">複数の荷主・メーカーの荷物をまとめて配送し積載率を高める手法。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">モーダルシフト</span><span class="term-tag">輸送</span></div><p class="term-def">トラック輸送の一部を鉄道・海運などに切り替える取り組み。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">中継輸送</span><span class="term-tag">輸送</span></div><p class="term-def">長距離輸送を複数ドライバーで分担する輸送方式。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">バース予約システム</span><span class="term-tag">DX</span></div><p class="term-def">荷降ろしの時間枠を事前予約し、荷待ち時間を減らす仕組み。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">積載率</span><span class="term-tag">KPI</span></div><p class="term-def">車両の最大積載量に対する、実際の積載量の割合。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">実車率（実働率）</span><span class="term-tag">KPI</span></div><p class="term-def">走行距離のうち貨物を積んで走った距離の割合。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">リードタイム</span><span class="term-tag">KPI</span></div><p class="term-def">発注から納品までにかかる時間。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">在庫回転率</span><span class="term-tag">KPI</span></div><p class="term-def">出荷量を平均在庫量で割った、在庫効率を示す指標。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">ラストマイル</span><span class="term-tag">輸送</span></div><p class="term-def">配送拠点から消費者の手元に届くまでの最終区間。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">フォワーダー</span><span class="term-tag">貿易</span></div><p class="term-def">荷主に代わり輸送手配や通関書類作成を行う仲介事業者。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">標準パレット（T11型）</span><span class="term-tag">保管</span></div><p class="term-def">日本国内物流で広く使われる1100mm×1100mmの一貫輸送用パレット規格。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">フィジカルAI</span><span class="term-tag">DX</span></div><p class="term-def">ロボットやセンサーが実空間を認識しながら作業を担うAI技術。倉庫の自動化などに活用される。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">TCO（総所有コスト）</span><span class="term-tag">投資</span></div><p class="term-def">初期費用に運用費・保守費・廃棄費までを含めた、保有し続けるための総コスト。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">ROI（投資収益率）</span><span class="term-tag">投資</span></div><p class="term-def">年間効果額を投資額で割った、投資効率を示す指標。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">NPV（正味現在価値）</span><span class="term-tag">投資</span></div><p class="term-def">将来のキャッシュフローを現在価値に割り引いて評価する投資判断指標。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">IRR（内部収益率）</span><span class="term-tag">投資</span></div><p class="term-def">投資案件の収益率を示す指標。NPVがゼロになる割引率にあたる。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">損益分岐点</span><span class="term-tag">経営</span></div><p class="term-def">固定費と変動費から算出する、損益がゼロになる物量・売上の水準。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">物流ABC（活動基準原価計算）</span><span class="term-tag">経営</span></div><p class="term-def">出荷先や商品ごとのコストを、作業単位で配賦して算出する原価計算手法。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">物流コスト対売上高比率</span><span class="term-tag">経営</span></div><p class="term-def">物流コストを売上高で割った、業界比較にも使われる代表的な経営指標。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">Make or Buy</span><span class="term-tag">経営</span></div><p class="term-def">物流機能を自社で持つか、外部委託（アウトソーシング）するかの意思決定。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">DC（ディストリビューションセンター）</span><span class="term-tag">拠点</span></div><p class="term-def">在庫を保有し出荷する「在庫型」の物流拠点。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">TC（トランスファーセンター）</span><span class="term-tag">拠点</span></div><p class="term-def">在庫を持たず、仕分け・積み替えのみを行う「通過型」の物流拠点。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">クロスドッキング</span><span class="term-tag">拠点</span></div><p class="term-def">入荷した貨物を保管せずに仕分けてすぐ出荷する物流手法。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">重心法</span><span class="term-tag">拠点</span></div><p class="term-def">出荷先の所在地と物量を加重平均し、輸送コストが最小となる理論上の立地を求める手法。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">安全在庫</span><span class="term-tag">在庫</span></div><p class="term-def">需要や納期のばらつきに備えて、通常より多く持つ在庫。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">経済的発注量（EOQ）</span><span class="term-tag">在庫</span></div><p class="term-def">発注コストと在庫保管コストの合計が最小になる、1回あたりの最適な発注量。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">√n則</span><span class="term-tag">拠点</span></div><p class="term-def">拠点を分散すると、総安全在庫量が理論上は拠点数の平方根に比例して増える傾向を示す考え方。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">BCP（事業継続計画）</span><span class="term-tag">リスク</span></div><p class="term-def">災害などで物流が寸断された際に、重要機能を維持・復旧するための計画。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">サプライチェーン・マッピング</span><span class="term-tag">リスク</span></div><p class="term-def">一次サプライヤーの先の二次・三次サプライヤーまで供給網を可視化する取り組み。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">GHGプロトコル（Scope1/2/3）</span><span class="term-tag">環境</span></div><p class="term-def">温室効果ガス排出量を自社排出・購入電力・取引先を含む排出に区分して算定する国際基準。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">グリーンロジスティクス</span><span class="term-tag">環境</span></div><p class="term-def">環境負荷の低減と物流効率化を両立させる取り組みの総称。</p></div>
-        <div class="term"><div class="term-head"><span class="term-name">ベンチマーキング</span><span class="term-tag">経営</span></div><p class="term-def">自社のコストやKPIを業界平均・他社と比較し、改善余地を把握する手法。</p></div>
+            <div class="term-list" id="termList">
+        <div class="term">
+          <div class="term-head"><span class="term-name">3PL（サードパーティ・ロジスティクス）</span><span class="term-tag">物流</span></div>
+          <p class="term-def">荷主に代わって物流業務を包括的に受託する事業者・サービス。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>倉庫の運営から輸配送の手配、在庫管理までを一括して請け負う点が特徴で、荷主は物流機能をアセットごと外部化できる。近年は単なる作業代行にとどまらず、需要予測やネットワーク設計まで踏み込む「戦略的3PL」も増えている。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">4PL</span><span class="term-tag">物流</span></div>
+          <p class="term-def">3PLに加え、物流戦略の企画や複数事業者の統合管理まで担う形態。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>自らは輸送・保管の実作業を持たず、複数の3PLや運送会社を統合的にマネジメントする「司令塔」の役割を担う。荷主にとっては、物流機能全体の設計・最適化を外部の専門家に委ねる選択肢になる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">SCM（サプライチェーン・マネジメント）</span><span class="term-tag">経営</span></div>
+          <p class="term-def">調達から販売までの供給網全体を、企業の枠を超えて最適化する考え方。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>原材料の調達、生産、物流、販売という一連の流れを、自社だけでなくサプライヤーや取引先も含めて全体最適の視点で管理する。部分最適の積み上げでは生まれない、リードタイム短縮や在庫削減の効果を狙う。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">WMS（倉庫管理システム）</span><span class="term-tag">DX</span></div>
+          <p class="term-def">入出庫・在庫・棚卸などの倉庫内業務を管理するシステム。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>どの棚にどの商品が何個あるかをリアルタイムに把握し、ピッキング指示や出荷検品まで一元管理する。ハンディターミナルやRFIDと連携することで、庫内の人為的ミスを減らし生産性を高める効果がある。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">TMS（輸配送管理システム）</span><span class="term-tag">DX</span></div>
+          <p class="term-def">配車計画や運行状況、輸送コストを管理するシステム。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>配送先・積載量・車両台数から最適な配車・ルートを組み、リアルタイムの位置情報や到着予定時刻の管理も担う。近年はAIによる自動配車や、複数荷主の共同配送マッチングに活用される例も増えている。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">EDI（電子データ交換）</span><span class="term-tag">DX</span></div>
+          <p class="term-def">受発注データなどを企業間でやり取りする電子的な仕組み。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>従来FAXや電話で行っていた発注・出荷案内・請求といったやり取りを、決まった形式のデータで自動的に交換する。入力の手間と転記ミスを減らし、受発注のリードタイム短縮にもつながる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">Incoterms（インコタームズ）</span><span class="term-tag">貿易</span></div>
+          <p class="term-def">貿易取引の費用・危険負担の分岐点を定めた国際ルール。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>国際商業会議所（ICC）が定める規則で、FOB・CIF・DDPなど十数種類の取引条件がある。「どこまでの輸送費を売主が負担するか」「貨物の滅失・損傷リスクがどの時点で買主に移るか」を明確にし、貿易取引のトラブルを防ぐ。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">コールドチェーン</span><span class="term-tag">食品</span></div>
+          <p class="term-def">生産から消費まで低温を途切れさせずに保つ物流の仕組み。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>工場での製造直後から、倉庫保管、輸送、店舗での陳列に至るまで、指定温度帯を維持し続けることが品質と安全性を左右する。荷役や積み替えの瞬間に生じる「温度逸脱」をいかに短くするかが実務上の要点になる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">常温物流（ドライ）</span><span class="term-tag">食品</span></div>
+          <p class="term-def">概ね15〜25℃前後で保管・輸送する物流。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>温度管理コストがかからない分、輸送・保管の選択肢が広く、共同配送やモーダルシフトとの相性も良い。缶詰・乾物・飲料など、比較的日持ちする加工食品が中心となる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">チルド物流（冷蔵）</span><span class="term-tag">食品</span></div>
+          <p class="term-def">概ね0〜10℃前後で保管・輸送する物流。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>乳製品・惣菜・生鮮食品など、鮮度劣化が早い商品を扱うため、常温物流より厳格な温度管理と短いリードタイムが求められる。庫内・車内の温度を常時記録し、逸脱があった場合に追跡できる体制が重要になる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">フローズン物流（冷凍）</span><span class="term-tag">食品</span></div>
+          <p class="term-def">-18℃以下を目安に保管・輸送する物流。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>アイスクリームなど品目によってはさらに厳しい温度基準が設けられることもある。荷役時の一時的な温度上昇（庫外時間）の管理が特に重要で、専用の冷凍車・冷凍倉庫という設備投資も必要になる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">先入れ先出し（FIFO）</span><span class="term-tag">食品</span></div>
+          <p class="term-def">入荷や製造が早い商品から先に出荷する原則。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>賞味期限・消費期限が近い商品から順に出荷することで、店頭での期限切れ・食品ロスを防ぐ。棚入れの位置管理や出荷指示のロジックにこの原則を組み込むことが、食品物流の基本動作になる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">後入れ先出し（LIFO）</span><span class="term-tag">在庫</span></div>
+          <p class="term-def">直近に入荷した商品から出荷する方式。棚卸資産の評価などで使われる。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>物理的な出荷順というよりも、主に会計上の在庫評価方法として使われることが多い（インフレ時の利益圧縮効果など）。食品物流の実務ではFIFOが原則であり、LIFOはむしろ避けるべき運用とされる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">3分の1ルール</span><span class="term-tag">食品</span></div>
+          <p class="term-def">製造日から賞味期限までを3等分し、最初の3分の1以内に小売へ納品する商慣行。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>日本の食品流通で長年続いてきた商慣行で、納品期限を過ぎた在庫は返品・廃棄の対象になりやすく、食品ロスの一因とされてきた。近年は納品期限を「2分の1ルール」に緩和する動きが業界全体で広がっている。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">賞味期限／消費期限</span><span class="term-tag">食品</span></div>
+          <p class="term-def">賞味期限はおいしく食べられる目安、消費期限は安全に食べられる期限を示す。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>賞味期限はスナック菓子や缶詰など劣化が比較的緩やかな食品に、消費期限は弁当・惣菜など劣化が早い食品に表示される。期限を過ぎても賞味期限は直ちに食べられなくなるわけではない点が消費期限との大きな違い。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">物流の2024年問題</span><span class="term-tag">政策</span></div>
+          <p class="term-def">トラックドライバーの時間外労働上限規制により輸送力不足が懸念された問題。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>働き方改革関連法により、2024年4月からドライバーの時間外労働の上限が年960時間に規制された。長時間労働に支えられてきた輸送力が構造的に不足し、これまで通りの物量を運べなくなる懸念が業界全体で共有された。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">物流の2026年問題</span><span class="term-tag">政策</span></div>
+          <p class="term-def">改正物流効率化法により荷主にも規制的措置が課される問題。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>2026年4月から、年9万トン以上を扱う「特定荷主」に中長期計画の策定や物流統括管理者（CLO）の選任が義務化された。ドライバー側の規制だった2024年問題に対し、荷主側にも責任を求める点が大きな転換となる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">物流効率化法</span><span class="term-tag">政策</span></div>
+          <p class="term-def">荷主・物流事業者に効率化の取り組みを求める法律。2026年問題の根拠法。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>正式名称は「流通業務の総合化及び効率化の促進に関する法律」の改正法。積載効率の向上や荷待ち・荷役時間の短縮などを、荷主・物流事業者双方の努力義務・法的義務として位置づける。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">共同配送</span><span class="term-tag">輸送</span></div>
+          <p class="term-def">複数の荷主・メーカーの荷物をまとめて配送し積載率を高める手法。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>同業他社や取引先と車両を共有することで、1台あたりの積載効率を高め、走行距離とドライバー数を抑えられる。競合同士でも、物流領域だけは協調する「競争と協調の分離」の代表例とされる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">モーダルシフト</span><span class="term-tag">輸送</span></div>
+          <p class="term-def">トラック輸送の一部を鉄道・海運などに切り替える取り組み。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>鉄道・船舶は一度に大量の貨物を運べるため、ドライバー不足対策とCO2削減の両方に効果がある。一方で、輸送時間が長くなりやすく、拠点までの横持ち輸送（トラック区間）も別途必要になる点が実務上の制約になる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">中継輸送</span><span class="term-tag">輸送</span></div>
+          <p class="term-def">長距離輸送を複数ドライバーで分担する輸送方式。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>中間拠点でドライバーとトレーラーを交換する「スイッチ方式」などにより、1人のドライバーが1日で自宅に帰れる範囲の運行に収められる。長距離ドライバーの労働環境改善策として注目されている。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">バース予約システム</span><span class="term-tag">DX</span></div>
+          <p class="term-def">荷降ろしの時間枠を事前予約し、荷待ち時間を減らす仕組み。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>トラックが倉庫・物流センターに到着してから荷降ろしが始まるまでの「荷待ち時間」は、ドライバーの拘束時間を圧迫する大きな要因とされる。到着時間を分散させることで、センター側の受け入れ体制も平準化できる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">積載率</span><span class="term-tag">KPI</span></div>
+          <p class="term-def">車両の最大積載量に対する、実際の積載量の割合。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>積載率が低いまま走行する「空気を運ぶ」状態はコスト効率が悪く、共同配送やルート最適化による改善の余地が大きい指標とされる。容積（体積）ベースと重量ベースの両方で管理されることが多い。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">実車率（実働率）</span><span class="term-tag">KPI</span></div>
+          <p class="term-def">走行距離のうち貨物を積んで走った距離の割合。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>荷物を降ろした後、次の荷物を積むまでの「空車回送」をいかに減らすかが改善のポイントになる。帰り便に別の荷物を割り当てる「ラウンド輸送」の設計が、実車率向上の代表的な打ち手。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">リードタイム</span><span class="term-tag">KPI</span></div>
+          <p class="term-def">発注から納品までにかかる時間。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>短縮すれば顧客満足度は上がるが、輸送手段の選択肢が狭まりコストが上昇しやすい。逆に長くとれば輸送・保管コストは下げやすいが在庫や欠品リスクが増える、というトレードオフの中心にある指標。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">在庫回転率</span><span class="term-tag">KPI</span></div>
+          <p class="term-def">出荷量を平均在庫量で割った、在庫効率を示す指標。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>回転率が高いほど、少ない在庫で多くの売上を生み出せていることを示す一方、高すぎると欠品リスクも高まる。食品では鮮度管理の観点からも、回転率の低い滞留在庫は早期に発見すべき経営指標とされる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">ラストマイル</span><span class="term-tag">輸送</span></div>
+          <p class="term-def">配送拠点から消費者の手元に届くまでの最終区間。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>配送先が分散し1件あたりの物量が小さいため、輸送効率が最も悪化しやすい区間とされる。EC・即時配送の拡大により負荷が増しており、ロッカー受け取りや置き配など受け取り方法の多様化で対応する動きが進む。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">フォワーダー</span><span class="term-tag">貿易</span></div>
+          <p class="term-def">荷主に代わり輸送手配や通関書類作成を行う仲介事業者。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>船会社・航空会社のスペースを確保し、複数荷主の貨物を取りまとめて輸送を手配する。通関書類の作成や保険手配まで代行することが多く、貿易実務における荷主の窓口的な存在になる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">標準パレット（T11型）</span><span class="term-tag">保管</span></div>
+          <p class="term-def">日本国内物流で広く使われる1100mm×1100mmの一貫輸送用パレット規格。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>荷役の都度パレットを積み替えずに、生産地から店舗まで同じパレットのまま運ぶ「一貫パレチゼーション」を実現するための標準規格。トラックの荷台やコンテナのサイズもこの規格を前提に設計されることが多い。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">フィジカルAI</span><span class="term-tag">DX</span></div>
+          <p class="term-def">ロボットやセンサーが実空間を認識しながら作業を担うAI技術。倉庫の自動化などに活用される。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>決まったルートを走行するだけの従来型ロボットと異なり、周囲の人や障害物の状況を都度認識して自律的に判断・行動できる点が特徴。庫内のピッキングや施設内配送など、環境変化の多い現場での活用が広がっている。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">TCO（総所有コスト）</span><span class="term-tag">投資</span></div>
+          <p class="term-def">初期費用に運用費・保守費・廃棄費までを含めた、保有し続けるための総コスト。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>車両や設備の購入価格だけで比較すると、後々の燃料費・メンテナンス費・故障時のダウンタイムコストを見落としやすい。数年単位の総コストで比較することで、初期費用が高くても長期的に有利な選択肢が見えることがある。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">ROI（投資収益率）</span><span class="term-tag">投資</span></div>
+          <p class="term-def">年間効果額を投資額で割った、投資効率を示す指標。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>自動化設備や新拠点への投資が「何%のリターンを生むか」を示すシンプルな指標で、複数の投資案件を比較する際の一次スクリーニングによく使われる。時間軸を考慮しない点が、NPVなどより精緻な指標との違いになる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">NPV（正味現在価値）</span><span class="term-tag">投資</span></div>
+          <p class="term-def">将来のキャッシュフローを現在価値に割り引いて評価する投資判断指標。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>将来得られる効果額は、同じ金額でも時間が経つほど価値が下がる（割引かれる）という考え方に基づく。NPVがプラスであれば、その投資は資本コストを上回るリターンを生むと判断できる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">IRR（内部収益率）</span><span class="term-tag">投資</span></div>
+          <p class="term-def">投資案件の収益率を示す指標。NPVがゼロになる割引率にあたる。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>会社が求める最低限の収益率（ハードルレート）とIRRを比較し、上回っていれば投資に値すると判断する。複数の投資案件の優先順位付けにも使われるが、投資規模の違いを反映しない点には注意が必要。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">損益分岐点</span><span class="term-tag">経営</span></div>
+          <p class="term-def">固定費と変動費から算出する、損益がゼロになる物量・売上の水準。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>新しい物流拠点や自動化設備が「どのくらいの物量からペイするか」を試算する基本ツール。損益分岐点物量＝固定費÷（1−変動費率）で求められ、投資稟議の説得力を左右する数字になる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">物流ABC（活動基準原価計算）</span><span class="term-tag">経営</span></div>
+          <p class="term-def">出荷先や商品ごとのコストを、作業単位で配賦して算出する原価計算手法。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>ピッキング1件、配送1件といった活動単位でコストを積み上げるため、売上に比例配分する従来の原価計算では見えなかった「実は赤字の取引」を可視化できる。多頻度小口の取引先ほど採算が悪化しているケースが多い。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">物流コスト対売上高比率</span><span class="term-tag">経営</span></div>
+          <p class="term-def">物流コストを売上高で割った、業界比較にも使われる代表的な経営指標。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>公益社団法人日本ロジスティクスシステム協会（JILS）が毎年公表する調査データと自社の数値を比較することで、自社の物流コストが業界内でどの水準にあるかを客観的に把握できる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">Make or Buy</span><span class="term-tag">経営</span></div>
+          <p class="term-def">物流機能を自社で持つか、外部委託（アウトソーシング）するかの意思決定。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>自社物流は柔軟性やノウハウ蓄積に強みがある一方、繁閑差の吸収やアセット保有リスクが課題になる。3PLへの委託は固定費の変動費化がメリットだが、価格交渉力の低下や機密性の高いノウハウの外部依存がリスクになる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">DC（ディストリビューションセンター）</span><span class="term-tag">拠点</span></div>
+          <p class="term-def">在庫を保有し出荷する「在庫型」の物流拠点。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>TC（トランスファーセンター）と異なり在庫を保有するため、需要変動を吸収するバッファとしての役割を果たす。一方で在庫保管コストがかかるため、拠点戦略では在庫回転率とのバランスが問われる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">TC（トランスファーセンター）</span><span class="term-tag">拠点</span></div>
+          <p class="term-def">在庫を持たず、仕分け・積み替えのみを行う「通過型」の物流拠点。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>商品は到着後、短時間で仕分けられて別の車両に積み替えられ、在庫として滞留する時間はほぼない。鮮度重視の食品ほど、庫内の滞留時間を最小化できるTC型の拠点設計が好まれる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">クロスドッキング</span><span class="term-tag">拠点</span></div>
+          <p class="term-def">入荷した貨物を保管せずに仕分けてすぐ出荷する物流手法。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>TC（トランスファーセンター）の運営を支える中核的な手法で、入荷トラックの荷物をそのまま出荷トラックに積み替えることで保管コストとリードタイムを大幅に削減できる。事前の入出荷情報の精緻な連携が前提になる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">重心法</span><span class="term-tag">拠点</span></div>
+          <p class="term-def">出荷先の所在地と物量を加重平均し、輸送コストが最小となる理論上の立地を求める手法。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>各出荷先の座標に物量を重みとしてかけ合わせ、その加重平均点を理論上の最適立地とする。実際の用地選定では道路網・労働力確保・地価も加味するが、初期の候補地選定における目安として使える。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">安全在庫</span><span class="term-tag">在庫</span></div>
+          <p class="term-def">需要や納期のばらつきに備えて、通常より多く持つ在庫。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>需要予測の誤差や仕入れ先の納期遅延に備えるバッファで、多すぎれば保管コストと食品ロスのリスクが増し、少なすぎれば欠品のリスクが増す。需要変動の大きさと許容できる欠品率から統計的に算出されることが多い。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">経済的発注量（EOQ）</span><span class="term-tag">在庫</span></div>
+          <p class="term-def">発注コストと在庫保管コストの合計が最小になる、1回あたりの最適な発注量。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>発注回数を増やすほど1回あたりの発注コストは減るが在庫保管コストは増え、逆に発注量を増やすとその関係は逆転する。この2つのコストの合計が最小になる点を数式で求める、在庫管理の基本理論の一つ。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">√n則</span><span class="term-tag">拠点</span></div>
+          <p class="term-def">拠点を分散すると、総安全在庫量が理論上は拠点数の平方根に比例して増える傾向を示す考え方。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>例えば拠点を4倍に増やすと、総安全在庫量は理論上2倍（4の平方根）で済むという考え方。逆に言えば拠点統合による在庫削減効果を試算する際の基本的な理論的根拠になる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">BCP（事業継続計画）</span><span class="term-tag">リスク</span></div>
+          <p class="term-def">災害などで物流が寸断された際に、重要機能を維持・復旧するための計画。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>地震・水害・感染症などの緊急事態を想定し、拠点の複線化や取引先の分散、代替輸送ルートの確保をあらかじめ計画しておく。食品は代替の利かない生活必需品であるため、特に重視される領域。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">サプライチェーン・マッピング</span><span class="term-tag">リスク</span></div>
+          <p class="term-def">一次サプライヤーの先の二次・三次サプライヤーまで供給網を可視化する取り組み。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>自社が直接取引する一次サプライヤーだけでなく、その先の原材料調達先まで把握することで、特定地域や特定企業に依存するリスクを事前に発見できる。近年はサステナビリティ・人権デューデリジェンスの観点からも重要性が高まっている。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">GHGプロトコル（Scope1/2/3）</span><span class="term-tag">環境</span></div>
+          <p class="term-def">温室効果ガス排出量を自社排出・購入電力・取引先を含む排出に区分して算定する国際基準。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>Scope1は自社の燃料使用による直接排出、Scope2は購入電力等による間接排出、Scope3は輸送委託先や仕入れ物流を含むサプライチェーン全体の排出を指す。物流は多くの企業でScope3の比重が大きい領域とされる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">グリーンロジスティクス</span><span class="term-tag">環境</span></div>
+          <p class="term-def">環境負荷の低減と物流効率化を両立させる取り組みの総称。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>積載率の向上はコスト削減とCO2削減の両方に効くなど、環境対応と効率化が両立する場面が多い。ESG投資家や取引先からの開示要請が強まる中、物流企画にも定量的な環境指標の提示が求められる場面が増えている。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">ベンチマーキング</span><span class="term-tag">経営</span></div>
+          <p class="term-def">自社のコストやKPIを業界平均・他社と比較し、改善余地を把握する手法。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>JILSの物流コスト調査など、業界団体が公表する統計データが比較の基準としてよく使われる。自社の数値だけを見ていては気づきにくい改善余地を、外部との比較によって客観的に発見できる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">AS/RS（自動保管検索システム）</span><span class="term-tag">DX</span></div>
+          <p class="term-def">保管棚とスタッカークレーンなどを組み合わせ、入出庫を自動化する倉庫システム。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>高密度な自動ラックに商品を格納し、コンピューター制御で必要な商品を自動的に取り出す仕組み。省スペースで高い保管効率を実現できる一方、初期投資が大きく、物量変動への柔軟な対応力は人手作業に劣る面もある。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">AGV／AMR（無人搬送車）</span><span class="term-tag">DX</span></div>
+          <p class="term-def">庫内でパレットや棚を自動搬送する無人車両。AGVは決まった経路、AMRは自律的に経路を判断する。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>AGV（Automated Guided Vehicle）は磁気テープなどの誘導路に沿って走行するのに対し、AMR（Autonomous Mobile Robot）はセンサーとAIで周囲を認識し、障害物を避けながら自律走行する。庫内のピッキング・搬送作業の省人化に活用が広がっている。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">RFID</span><span class="term-tag">DX</span></div>
+          <p class="term-def">電波を使ってICタグの情報を非接触で読み取る技術。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>バーコードと違い、複数のタグを一括で、かつ梱包の外側からでも読み取れるのが特徴。棚卸の大幅な時間短縮や、検品レス（開梱せずに数量確認）の実現に活用され、アパレルや食品物流での導入が進んでいる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">ピッキング</span><span class="term-tag">庫内</span></div>
+          <p class="term-def">保管場所から出荷に必要な商品を取り出す作業。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>1件の注文ごとに商品を集める「シングルピッキング」と、複数注文分をまとめて集めてから仕分ける「トータルピッキング」があり、物量や注文特性によって使い分けられる。庫内作業の中でも特に人手と時間がかかる工程とされる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">検品</span><span class="term-tag">庫内</span></div>
+          <p class="term-def">出荷・入荷する商品の数量や品質を確認する作業。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>誤出荷を防ぐ最後の砦となる工程で、バーコードやRFIDのスキャンで自動化されることが多い。食品では併せて外観や賞味期限のチェックも行われ、品質保証の観点からも重要な工程になる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">誤出荷率</span><span class="term-tag">KPI</span></div>
+          <p class="term-def">出荷した件数のうち、誤った商品・数量を出荷してしまった割合を示す指標。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>検品体制の精度や庫内オペレーションの品質を映す指標で、食品では誤出荷がアレルゲン混入などの重大事故につながるリスクもある。デジタルピッキング（表示器で指示するシステム）の導入で低減が図られることが多い。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">庫内生産性</span><span class="term-tag">KPI</span></div>
+          <p class="term-def">一定時間あたりに処理できるピッキング・検品・仕分けの物量。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>庫内レイアウトの動線設計や、AGV・自動倉庫といった機器導入によって大きく変わる指標。人時生産性（1人1時間あたりの処理件数）として管理されることが多く、庫内改善の効果を測る基本尺度になる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">HACCP</span><span class="term-tag">食品</span></div>
+          <p class="term-def">食品の製造・加工工程で危害要因を分析し、重要管理点を継続的に監視する衛生管理手法。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>原材料の受け入れから出荷までの各工程で「どこにリスクがあるか」を特定し、そのポイントを重点的に管理する国際的な手法。日本では2021年6月から、原則すべての食品等事業者にHACCPに沿った衛生管理が義務化されている。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">食品表示法</span><span class="term-tag">食品</span></div>
+          <p class="term-def">食品の安全性や品質に関する表示ルールを定めた法律。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>アレルゲン表示、原産地表示、添加物表示などを一元的に規定する。物流工程でも、仕分けや積み合わせの際に表示内容の異なる商品を取り違えないための体制が、法令順守の観点から求められる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">ダブル連結トラック</span><span class="term-tag">輸送</span></div>
+          <p class="term-def">通常より長い2台連結のトラックで、1回の輸送で運べる物量を増やす車両。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>全長25メートル程度の車両で、通常のトラック2台分に近い物量を1人のドライバーで運べる。ドライバー不足対策として国が普及を後押ししており、高速道路の走行可能区間が順次拡大されている。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">ミルクラン方式</span><span class="term-tag">輸送</span></div>
+          <p class="term-def">1台の車両が複数の仕入先を巡回して集荷する輸送方式。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>牛乳配達車が複数の酪農家を回って集乳する様子に由来する名称。個別に納品してもらうより、集荷側が計画的に巡回することで、積載率の向上とサプライヤー側の輸送負担軽減を同時に実現できる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">ドレージ</span><span class="term-tag">貿易</span></div>
+          <p class="term-def">港湾・コンテナヤードとの間でコンテナを陸送する短距離輸送。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>海上輸送されたコンテナを、そのまま荷主の倉庫や工場まで運ぶ、あるいはその逆を担う区間輸送。国際輸送とラストマイルをつなぐ工程であり、港湾周辺の混雑や待機時間が輸送効率を左右しやすい。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">OMS（受注管理システム）</span><span class="term-tag">DX</span></div>
+          <p class="term-def">複数の販売チャネルからの注文を一元管理するシステム。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>実店舗・自社EC・モールなど複数の販売経路の注文情報を集約し、在庫引き当てや出荷指示につなげる。WMSと連携することで、どの倉庫のどの在庫から出荷するかを最適に振り分けられる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">ラウンド輸送</span><span class="term-tag">輸送</span></div>
+          <p class="term-def">目的地への配送後、空車で戻らずに別の荷物を積んで帰る輸送方式。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>片道だけ荷物を運んで空のまま戻る「片荷輸送」は実車率を下げる大きな要因となる。行き帰りとも荷物を積む輸送ルートを設計することで、車両とドライバーの稼働効率を高められる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">カーボンニュートラル物流</span><span class="term-tag">環境</span></div>
+          <p class="term-def">物流活動によるCO2排出量を実質ゼロに近づける取り組みの総称。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>モーダルシフト、共同配送による積載率向上、EVトラックの導入などが代表的な手段。物流はCO2排出量が多い分野の一つであり、荷主企業のScope3（サプライチェーン排出量）算定においても重要な領域になる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">在庫の一元管理</span><span class="term-tag">在庫</span></div>
+          <p class="term-def">複数拠点・複数チャネルの在庫情報を1つのシステムで統合的に把握する仕組み。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>実店舗・EC・倉庫ごとにバラバラに在庫を管理していると、機会損失や過剰在庫が生じやすい。在庫情報を一元化することで、どこにある在庫でも柔軟に出荷先を割り当てられるようになる。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">検数</span><span class="term-tag">庫内</span></div>
+          <p class="term-def">入出荷時に貨物の数量が伝票と一致しているかを確認する作業。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>検品が品質面も含む広い概念であるのに対し、検数は主に「個数が合っているか」に焦点を当てた作業を指すことが多い。港湾や倉庫の入出庫時に、荷主・輸送事業者双方の立会いのもとで行われることもある。</p></div>
+          </details>
+        </div>
+        <div class="term">
+          <div class="term-head"><span class="term-name">バンニング／デバンニング</span><span class="term-tag">貿易</span></div>
+          <p class="term-def">バンニングはコンテナへの貨物の積み込み、デバンニングは取り出し作業を指す。</p>
+          <details class="term-more">
+            <summary><span class="tm-label-closed">詳しく見る</span><span class="tm-label-open">閉じる</span><svg class="tm-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 6l6 6-6 6"/></svg></summary>
+            <div class="term-detail"><p>国際輸送で使われるコンテナに、荷崩れしないよう計画的に貨物を積み付ける工程がバンニング。到着後にコンテナから貨物を取り出す作業がデバンニングで、いずれも積み付け方次第で輸送効率や貨物損傷リスクが変わる。</p></div>
+          </details>
+        </div>
       </div>
       <p class="term-empty" id="termEmpty" hidden>一致する用語が見つかりませんでした。</p>
     </section>
@@ -1398,6 +1941,12 @@
           <button class="hist-toggle-btn" type="button" data-mode="category">分類ごと</button>
         </div>
       </div>
+      <div class="hist-filter">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5h18M6 12h12M10 19h4"/></svg>
+        <select id="histCategoryFilter" aria-label="分類で絞り込み">
+          <option value="all">すべての分類</option>
+        </select>
+      </div>
       <div id="histList"></div>
     </section>
 
@@ -1430,23 +1979,52 @@
     var formatted = new Intl.DateTimeFormat('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' }).format(d);
     todayEl.textContent = formatted;
 
-    var tabs = document.querySelectorAll('.tab-btn');
+    var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab-btn'));
     var panels = document.querySelectorAll('.panel');
-    tabs.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var target = btn.getAttribute('data-target');
-        tabs.forEach(function (b) {
-          var active = b === btn;
-          b.classList.toggle('active', active);
-          b.setAttribute('aria-selected', active ? 'true' : 'false');
-        });
-        panels.forEach(function (p) {
-          p.hidden = p.getAttribute('data-panel') !== target;
-        });
-        document.querySelector('.content').scrollTo({ top: 0, behavior: 'auto' });
-        window.scrollTo({ top: 0, behavior: 'auto' });
+    var TAB_ORDER = tabs.map(function (b) { return b.getAttribute('data-target'); });
+
+    function activateTab(target) {
+      tabs.forEach(function (b) {
+        var active = b.getAttribute('data-target') === target;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-selected', active ? 'true' : 'false');
       });
+      panels.forEach(function (p) {
+        p.hidden = p.getAttribute('data-panel') !== target;
+      });
+      document.querySelector('.content').scrollTo({ top: 0, behavior: 'auto' });
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }
+    tabs.forEach(function (btn) {
+      btn.addEventListener('click', function () { activateTab(btn.getAttribute('data-target')); });
     });
+
+    /* ---- Swipe left/right between tabs ---- */
+    (function () {
+      var contentEl = document.querySelector('.content');
+      var startX = 0, startY = 0, tracking = false;
+      var SWIPE_MIN_DISTANCE = 60;
+      contentEl.addEventListener('touchstart', function (ev) {
+        if (ev.touches.length !== 1) return;
+        startX = ev.touches[0].clientX;
+        startY = ev.touches[0].clientY;
+        tracking = true;
+      }, { passive: true });
+      contentEl.addEventListener('touchend', function (ev) {
+        if (!tracking) return;
+        tracking = false;
+        var endX = ev.changedTouches[0].clientX;
+        var endY = ev.changedTouches[0].clientY;
+        var dx = endX - startX;
+        var dy = endY - startY;
+        if (Math.abs(dx) < SWIPE_MIN_DISTANCE || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+        var activeBtn = tabs.filter(function (b) { return b.classList.contains('active'); })[0];
+        var currentIndex = TAB_ORDER.indexOf(activeBtn ? activeBtn.getAttribute('data-target') : TAB_ORDER[0]);
+        var nextIndex = dx < 0 ? currentIndex + 1 : currentIndex - 1;
+        if (nextIndex < 0 || nextIndex >= TAB_ORDER.length) return;
+        activateTab(TAB_ORDER[nextIndex]);
+      }, { passive: true });
+    })();
 
     /* ---- News: fixed sort order by impact (desc), tie-break by date (desc) ---- */
     var newsList = document.getElementById('newsList');
@@ -1509,6 +2087,19 @@
     var HIST_VIEW_KEY = 'logiTechoHistViewV1';
     var RECENT_PAGE_SIZE = 6;
     var histViewMode = localStorage.getItem(HIST_VIEW_KEY) || 'recent';
+    var histCategoryFilter = 'all';
+
+    var histFilterSelect = document.getElementById('histCategoryFilter');
+    CATEGORY_ORDER.forEach(function (cat) {
+      var opt = document.createElement('option');
+      opt.value = cat;
+      opt.textContent = cat;
+      histFilterSelect.appendChild(opt);
+    });
+    histFilterSelect.addEventListener('change', function () {
+      histCategoryFilter = histFilterSelect.value;
+      renderHistory();
+    });
 
     function histItemHtml(e) {
       var readAtLabel = new Intl.DateTimeFormat('ja-JP', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(e.readAt));
@@ -1572,7 +2163,7 @@
         }
       }
 
-      /* ---- read list: 'recent' (expandable) or 'category' (accordion) ---- */
+      /* ---- read list: 'recent' (expandable) or 'category' (accordion), filterable ---- */
       var listEl = document.getElementById('histList');
 
       if (readEntries.length === 0) {
@@ -1580,13 +2171,22 @@
         return;
       }
 
+      var filteredEntries = histCategoryFilter === 'all'
+        ? readEntries
+        : readEntries.filter(function (e) { return e.category === histCategoryFilter; });
+
+      if (filteredEntries.length === 0) {
+        listEl.innerHTML = '<p class="hist-empty">「' + histCategoryFilter + '」の既読記事はまだありません。</p>';
+        return;
+      }
+
       if (histViewMode === 'category') {
         var readCategories = presentCategories
-          .filter(function (cat) { return (counts[cat] || 0) > 0; })
-          .sort(function (a, b) { return (counts[b] || 0) - (counts[a] || 0); });
-        listEl.innerHTML = readCategories.map(function (cat, idx) {
-          var items = readEntries.filter(function (e) { return e.category === cat; });
-          return '<details class="hist-group"' + (idx === 0 ? ' open' : '') + '>' +
+          .filter(function (cat) { return filteredEntries.some(function (e) { return e.category === cat; }); })
+          .sort(function (a, b) { return counts[b] - counts[a]; });
+        listEl.innerHTML = readCategories.map(function (cat) {
+          var items = filteredEntries.filter(function (e) { return e.category === cat; });
+          return '<details class="hist-group">' +
             '<summary>' +
               '<span class="hist-dot" style="background:var(--hue-' + (hueByCategory[cat] || 'navy') + ')"></span>' +
               '<span class="hist-group-name">' + cat + '</span>' +
@@ -1597,8 +2197,8 @@
           '</details>';
         }).join('');
       } else {
-        var visible = readEntries.slice(0, RECENT_PAGE_SIZE);
-        var rest = readEntries.slice(RECENT_PAGE_SIZE);
+        var visible = filteredEntries.slice(0, RECENT_PAGE_SIZE);
+        var rest = filteredEntries.slice(RECENT_PAGE_SIZE);
         var html = visible.map(histItemHtml).join('');
         if (rest.length > 0) {
           html += '<details class="hist-more"><summary>さらに' + rest.length + '件を表示</summary>' +
